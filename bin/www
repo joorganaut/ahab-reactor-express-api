@@ -11,7 +11,7 @@ var http = require('http');
 /**
  * Schema Update
  */
-const SchemaUpdate = require('./Services/common/SchemaUpdate')
+const SchemaUpdate = require('./services/common/SchemaUpdate')
 SchemaUpdate.SchemaUpdate();
 SchemaUpdate.PopulateRoles().then(()=>{});
 SchemaUpdate.PopulateUserFunctions().then(()=>{})
