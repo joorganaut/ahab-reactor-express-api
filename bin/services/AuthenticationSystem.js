@@ -26,16 +26,16 @@ class AuthenticationSystem extends BaseProcessor{
         let result = true;
         return result;
     }
-    async GenerateToken(){
+    static async GenerateToken(req, res){
         let response = {
             Result : {},
             Code : '',
             Message : '',
-            Error : null
+            Error : ''
         };
         let result = {};
         try{
-            let credentials = this.req.body;
+            let credentials = req.body;
             result = jwt.sign({
                 data: credentials
               }, 'secret', { expiresIn: '1h' });
@@ -48,7 +48,7 @@ class AuthenticationSystem extends BaseProcessor{
             response.Message = Response.MessageResponse_SYSTEM_MALFUNCTION.Message;
             response.Error = error.message;
         }       
-        this.res.send(JSON.stringify(response));
+        res.send(JSON.stringify(response));
     }
     async AuthenticateToken(){
         let response = {

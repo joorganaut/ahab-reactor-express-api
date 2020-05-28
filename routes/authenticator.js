@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var {AuthenticationSystem} = require('../bin/Services/AuthenticationSystem');
+var AuthenticationSystem = require('../bin/services/AuthenticationSystem').AuthenticationSystem;
 
-/* GET authenticator listing. */
+/* POST authenticator token. */
 router.post('/token', async function(req, res, next) {
-    let system = new AuthenticationSystem(req, res, next, ['*'], (x)=>{});
-    await system.GenerateToken();
+    await AuthenticationSystem.GenerateToken(req, res);
 });
 
 // router.post('/verify', async function(req, res, next) {
