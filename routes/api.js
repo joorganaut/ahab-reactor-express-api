@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var {AuthenticationSystem} = require('../bin/Services/AuthenticationSystem');
-var {InstitutionSystem} = require('../bin/Services/InstitutionSystem');
-var {UserSystem} = require('../bin/Services/UserSystem');
-var {VTUSystem} = require('../bin/Services/VTUSystem');
+var {AuthenticationSystem} = require('../bin/services/AuthenticationSystem');
+var {InstitutionSystem} = require('../bin/services/InstitutionSystem');
+var {UserSystem} = require('../bin/services/UserSystem');
+var {VTUSystem} = require('../bin/services/VTUSystem');
 
 /**
  * @swagger

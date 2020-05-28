@@ -1,4 +1,4 @@
-const Responses = require('../Services/common/Responses');
+const Responses = require('../services/common/Responses');
 const {
     Op,
     Sequelize,

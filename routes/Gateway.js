@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {USSDProcessorServer} = require('../bin/Services/USSDProcessorServer');
+const {USSDProcessorServer} = require('../bin/services/USSDProcessorServer');
 
 /**
  * @swagger
