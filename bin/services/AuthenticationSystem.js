@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 const Response = require('./common/Responses');
 class AuthenticationSystem extends BaseProcessor{
     constructor(req, res, next, roles, callback) {
-        super()
+        super(req, res, next, roles, callback);
         this.req = req;
         this.res = res;
         this.next = next;
         this.roles = roles;
-        this.callback = callback;
+        this.callback = callback.bind(this);
         this.error = '';
         this.AuthenticateToken();
     }
