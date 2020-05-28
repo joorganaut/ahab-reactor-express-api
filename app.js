@@ -18,11 +18,7 @@ var app = express();
 var swaggerDefinition = {
   info: {
     title: 'Ahab Reactor API',
-<<<<<<< HEAD
     version: '2.0.0',
-=======
-    version: '1.0.0',
->>>>>>> b4457106fa5bc2af57ec369c639ef49f9cae1dd5
     description: 'Documentation for the Ahab Reactor',
   },
   host: 'https://ahab-reactor.herokuapp.com',
