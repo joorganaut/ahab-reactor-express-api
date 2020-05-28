@@ -1,4 +1,4 @@
-const Responses = require('../Services/common/Responses');
+const Responses = require('./common/Responses');
 const T = require('../DAO/BusinessObjectDAO')
 const LoginRequest = require('../Core/models/mobile/LoginRequest').LoginRequest;
 const LoginResponse = require('../Core/models/mobile/LoginResponse').LoginResponse;
