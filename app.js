@@ -17,7 +17,7 @@ var app = express();
 // swagger definition
 var swaggerDefinition = {
   info: {
-    title: 'Node Swagger API',
+    title: 'Ahab Reactor API',
     version: '1.0.0',
     description: 'Documentation for the Ahab Reactor',
   },
