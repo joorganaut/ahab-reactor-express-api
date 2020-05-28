@@ -7,11 +7,9 @@ const {
 const {
     ProcessPinRequest
 } = require('../Core/models/products/ProcessPinRequest');
-const 
-    Responses
- = require('./common/Responses');
+const Responses = require('./common/Responses');
  const USSDCommand = require('../Services/common/USSDCommand');
- const PinProcessor = require('../Services/PinProcessor')
+ const PinProcessor = require('../Services/PinProcessor');
 class USSDProcessorServer {
     constructor(req, res, next) {
         this.req = req;

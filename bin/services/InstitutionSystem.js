@@ -1,4 +1,4 @@
-const Responses = require('../Services/common/responses');
+const Responses = require('./common/Responses');
 const T = require('../DAO/BusinessObjectDAO')
 const ValidateInstitutionRequest = require('../Core/models/mobile/ValidateInstitutionRequest').ValidateInstitutionRequest;
 const ValidateInstitutionResponse = require('../Core/models/mobile/ValidateInstitutionResponse').ValidateInstitutionResponse;
