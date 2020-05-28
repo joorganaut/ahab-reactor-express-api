@@ -10,7 +10,7 @@ class InstitutionSystem{
         this.error = '';
     }
     async AuthenticateInstitution(){
-        let response = new ValidateInstitutionResponse();
+        let response = new ValidateInstitutionResponse({Error : ''});
         let request = new ValidateInstitutionRequest(response.req.body);
         this.response.res.send(response.ToString());
     }
@@ -19,7 +19,7 @@ class InstitutionSystem{
         this.response.res.send(JSON.stringify(response));
     }
     async RegisterInstitution(){
-        let response = new RegisterResponse();
+        let response = new RegisterResponse({Error : ''});
         let request = new RegisterRequest(response.req.body);
         this.response.res.send(response.ToString());
     }

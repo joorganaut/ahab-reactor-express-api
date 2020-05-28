@@ -17,11 +17,11 @@ var app = express();
 // swagger definition
 var swaggerDefinition = {
   info: {
-    title: 'Node Swagger API',
-    version: '1.0.0',
+    title: 'Ahab Reactor API',
+    version: '2.0.0',
     description: 'Documentation for the Ahab Reactor',
   },
-  host: 'localhost:5250',
+  host: 'https://ahab-reactor.herokuapp.com',
   basePath: '/',
 };
 

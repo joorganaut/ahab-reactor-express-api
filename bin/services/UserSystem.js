@@ -16,22 +16,22 @@ class UserSystem{
 
     async Login(){
         let request = new LoginRequest(this.response.req.body);
-        let response = new LoginResponse();
+        let response = new LoginResponse({Error : ''});
         this.response.res.send(response.ToString())
     }
     async ChangePassword(){
         let request = new ChangePasswordRequest(this.response.req.body);
-        let response = new ChangePasswordResponse();
+        let response = new ChangePasswordResponse({Error : ''});
         this.response.res.send(response.ToString())
     }
     async ResetPassword(){
         let request = new ResetPasswordRequest(this.response.req.body);
-        let response = new ResetPasswordResponse();
+        let response = new ResetPasswordResponse({Error : ''});
         this.response.res.send(response.ToString())
     }
     async RegisterIndividual(){
         let request = new IndividualRegisterRequest(this.response.req.body);
-        let response = new IndividualRegisterResponse();
+        let response = new IndividualRegisterResponse({Error : ''});
         this.response.res.send(response.ToString())
     }
     async ActivateAccount(){
