@@ -21,7 +21,7 @@ var swaggerDefinition = {
     version: '1.0.0',
     description: 'Documentation for the Ahab Reactor',
   },
-  host: 'localhost:5250',
+  host: 'https://ahab-reactor.herokuapp.com/',
   basePath: '/',
 };
 
