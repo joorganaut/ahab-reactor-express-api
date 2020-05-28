@@ -1,4 +1,4 @@
-const Responses = require('../Services/common/responses');
+const Responses = require('../Services/common/Responses');
 const T = require('../DAO/BusinessObjectDAO')
 const TopUpMSISDNRequest = require('../Core/models/mobile/TopUpMSISDNRequest').TopUpMSISDNRequest;
 const TopUpMSISDNResponse = require('../Core/models/mobile/TopUpMSISDNResponse').TopUpMSISDNResponse;
