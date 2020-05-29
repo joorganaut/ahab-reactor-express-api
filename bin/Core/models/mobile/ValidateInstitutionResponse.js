@@ -1,7 +1,7 @@
 const BaseResponse = require('../../contracts/BaseResponse');
 class ValidateInstitutionResponse extends BaseResponse{
-    constructor(){
-        super()
+    constructor(props){
+        super(props);
     }
 }
 module.exports = {ValidateInstitutionResponse};

@@ -1,5 +1,5 @@
 const BaseProcessor = require('./BaseProcessor');
-const T = require('../DAO/BusinessObjectDAO')
+const T = require('../DAO/BusinessObjectDAO');
 const jwt = require('jsonwebtoken');
 const Response = require('./common/Responses');
 class AuthenticationSystem extends BaseProcessor{
@@ -50,69 +50,76 @@ class AuthenticationSystem extends BaseProcessor{
         }       
         res.send(JSON.stringify(response));
     }
-    async AuthenticateToken(){
+    async AuthenticateToken() {
         let response = {
-            Result : {},
-            Code : '',
-            Message : '',
-            Error : null
+            Result: {},
+            Code: '',
+            Message: '',
+            Error: null
         };
         let result = {};
-        try{
+        try {
             //Code to decode token
             let request = this.req.headers.authorization;
-            if(this.IsNullOrUndefined(request))
-            {
+            if (this.IsNullOrUndefined(request) && !this.roles.includes('*')) {
                 response.Result = result;
                 response.Code = Response.MessageResponse_AUTHENTICATION_ERROR.Code;
                 response.Message = Response.MessageResponse_AUTHENTICATION_ERROR.Message + ' Please provide a token';
                 response.error = this.error;
                 let processParameters = {
-                    req : this.req,
-                    res : this.res,
-                    Response : response,
+                    req: this.req,
+                    res: this.res,
+                    Response: response,
                 };
                 this.callback(processParameters);
-            }
-            let token = request.split(' ')[1];
-            let decode = jwt.verify(token, 'secret');
-            let data = decode.data;
-            if(this.IsAuthenticated(data) && this.IsInRole(data))
-            {
+            } else if(!this.roles.includes('*')){
+                let token = request.split(' ')[1];
+                let decode = jwt.verify(token, 'secret');
+                let data = decode.data;
+                if (this.IsAuthenticated(data) && this.IsInRole(data)) {
+                    response.Result = result;
+                    response.Code = Response.MessageResponse_SUCCESS.Code;
+                    response.Message = Response.MessageResponse_SUCCESS.Message;
+                    let processParameters = {
+                        req: this.req,
+                        res: this.res,
+                        Response: response,
+                    };
+                    this.callback(processParameters);
+                } else {
+                    response.Result = result;
+                    response.Code = Response.MessageResponse_AUTHENTICATION_ERROR.Code;
+                    response.Message = Response.MessageResponse_AUTHENTICATION_ERROR.Message;
+                    response.error = this.error;
+                    let processParameters = {
+                        req: this.req,
+                        res: this.res,
+                        Response: response,
+                    };
+                    this.callback(processParameters);
+                }
+            }else{
                 response.Result = result;
                 response.Code = Response.MessageResponse_SUCCESS.Code;
                 response.Message = Response.MessageResponse_SUCCESS.Message;
                 let processParameters = {
-                    req : this.req,
-                    res : this.res,
-                    Response : response,
+                    req: this.req,
+                    res: this.res,
+                    Response: response,
                 };
                 this.callback(processParameters);
             }
-            else{
-                response.Result = result;
-                response.Code = Response.MessageResponse_AUTHENTICATION_ERROR.Code;
-                response.Message = Response.MessageResponse_AUTHENTICATION_ERROR.Message;
-                response.error = this.error;
-                let processParameters = {
-                    req : this.req,
-                    res : this.res,
-                    Response : response,
-                };
-                this.callback(processParameters);
-            }
-        }
-        catch(error){
+        } catch (error) {
             response.Code = Response.MessageResponse_SYSTEM_MALFUNCTION.Code;
             response.Message = Response.MessageResponse_SYSTEM_MALFUNCTION.Message;
             response.Error = error.message;
             let processParameters = {
-                req : this.req,
-                res : this.res,
-                Response : response,
+                req: this.req,
+                res: this.res,
+                Response: response,
             };
             this.callback(processParameters);
-        } 
+        }
     }
 }
 module.exports = {AuthenticationSystem};

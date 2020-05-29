@@ -1,22 +1,22 @@
 require('dotenv').config();
 const { Op, DataTypes } = require('sequelize');
-const BusinessObject = require('../../Core/BusinessObject')
-const T = require('../../DAO/BusinessObjectDAO')
-const Role = require('../../Core/data/Role').Role;
-const UFunction = require('../../Core/data/UFunction').UFunction
-const UFunctionList = require('../../DAO/config/UFunctions')
+const BusinessObject = require('../../Core/BusinessObject');
+const T = require('../../DAO/BusinessObjectDAO');
+const {Role} = require('../../Core/data/Role');
+const {UFunction} = require('../../Core/data/UFunction');
+const UFunctionList = require('../../DAO/config/UFunctions');
 const sequelize  = BusinessObject.sequelize;
-let Production = Boolean(process.env['PRODUCTION'])
-let ForceUpdate = Boolean(process.env['FORCE_UPDATE'])
+let Production = Boolean(process.env['PRODUCTION']);
+let ForceUpdate = Boolean(process.env['FORCE_UPDATE']);
 const SchemaUpdate =()=>{ 
     try{        
-        console.log('ForceUpdate: ' + ForceUpdate + ', Production: '+ Production )
+        console.log('ForceUpdate: ' + ForceUpdate + ', Production: '+ Production );
         // sequelize.sync({force: true})
         Production ? sequelize.sync({alter: true}) : ForceUpdate? sequelize.sync({force: true}) :  sequelize.sync({alter: true})
     }
     catch(error)
     {
-        console.log(error.message)
+        console.log(error.message);
     }
 };
 const roleList = [

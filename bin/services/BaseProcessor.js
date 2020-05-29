@@ -19,16 +19,40 @@ class BaseProcessor {
     static GetDateAndTime(concat)
     {
         if(concat){
-            var today = new Date();
-            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-            return date+time
+            let today = new Date();
+            let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            return date+time;
         }else{
-            var today = new Date();
-            var date = today.getFullYear()+(today.getMonth()+1)+today.getDate();
-            var time = today.getHours()+today.getMinutes() + today.getSeconds();
-            return date+time
+            let today = new Date();
+            let date = today.getFullYear()+(today.getMonth()+1)+today.getDate();
+            let time = today.getHours()+today.getMinutes() + today.getSeconds();
+            return date+time;
+        }        
+    }
+    static GetTime(concat)
+    {
+        if(concat){
+            let today = new Date();
+            let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            return time;
+        }else{
+            let today = new Date();
+            let time = today.getHours()+today.getMinutes() + today.getSeconds();
+            return time;
+        }        
+    }
+    static GetDate(concat)
+    {
+        if(concat){
+            let today = new Date();
+            let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            return date;
+        }else{
+            let today = new Date();
+            let date = today.getFullYear()+(today.getMonth()+1)+today.getDate();
+            return date;
         }        
     }
 }
-module.exports = BaseProcessor
+module.exports = BaseProcessor;

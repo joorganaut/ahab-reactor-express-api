@@ -1,5 +1,5 @@
 const Responses = require('./common/Responses');
-const T = require('../DAO/BusinessObjectDAO')
+const T = require('../DAO/BusinessObjectDAO');
 const LoginRequest = require('../Core/models/mobile/LoginRequest').LoginRequest;
 const LoginResponse = require('../Core/models/mobile/LoginResponse').LoginResponse;
 const ChangePasswordRequest = require('../Core/models/mobile/ChangePasswordRequest').ChangePasswordRequest;
@@ -16,26 +16,26 @@ class UserSystem{
 
     async Login(){
         let request = new LoginRequest(this.response.req.body);
-        let response = new LoginResponse({Error : ''});
-        this.response.res.send(response.ToString())
+        let response = new LoginResponse(this.response.Response);
+        this.response.res.send(response.ToString());
     }
     async ChangePassword(){
         let request = new ChangePasswordRequest(this.response.req.body);
-        let response = new ChangePasswordResponse({Error : ''});
-        this.response.res.send(response.ToString())
+        let response = new ChangePasswordResponse(this.response.Response);
+        this.response.res.send(response.ToString());
     }
     async ResetPassword(){
         let request = new ResetPasswordRequest(this.response.req.body);
-        let response = new ResetPasswordResponse({Error : ''});
-        this.response.res.send(response.ToString())
+        let response = new ResetPasswordResponse(this.response.Response);
+        this.response.res.send(response.ToString());
     }
     async RegisterIndividual(){
         let request = new IndividualRegisterRequest(this.response.req.body);
-        let response = new IndividualRegisterResponse({Error : ''});
-        this.response.res.send(response.ToString())
+        let response = new IndividualRegisterResponse(this.response.Response);
+        this.response.res.send(response.ToString());
     }
     async ActivateAccount(){
-        this.response.res.redirect(200, 'AccountActivated')
+        this.response.res.redirect(200, 'AccountActivated');
     }
     
 }

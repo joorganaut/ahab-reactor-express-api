@@ -1,7 +1,7 @@
 class BaseModel{
     constructor(props){
-        this.Error = '';
-        this.InstitutionID = 0;
+        this.Error = props === undefined ? '' : props.Error;
+        this.InstitutionID = props === undefined ? 0 : props.InstitutionID;
     }
     static ToObject(input){
         return JSON.parse(input);

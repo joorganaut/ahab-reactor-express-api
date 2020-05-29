@@ -21,7 +21,8 @@ var swaggerDefinition = {
     version: '2.0.0',
     description: 'Documentation for the Ahab Reactor',
   },
-  host: 'https://ahab-reactor.herokuapp.com',
+  host: 'localhost:5250',
+  // host: 'https://ahab-reactor.herokuapp.com',
   basePath: '/',
 };
 
@@ -54,7 +55,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/authenticate', authenticatorRouter);
 app.use('/api', apiRouter);
-app.use('/gateway', gatewayRouter)
+app.use('/gateway', gatewayRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -3,26 +3,31 @@ const { Op, DataTypes } = require('sequelize');
 const BusinessObject = require('../BusinessObject')
 
 
+/*public virtual string AccountNumber { get; set; }
+        public virtual decimal Amount { get; set; }
+        public virtual string Code { get; set; }
+*/
+
+
 const DISABLE_SEQUELIZE_DEFAULTS = {
     timestamps: false,
     freezeTableName: true,
     ssl : false,
 };
 const sequelize  = BusinessObject.sequelize;
-const Role = sequelize.define('Roles', {
+const Lien = sequelize.define('Liens', {
     ID: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
-    IsTransactable: { type:  DataTypes.BOOLEAN},
-    TransactionAmount: { type:  DataTypes.DECIMAL},
+    AccountNumber: { type:  DataTypes.STRING},
+    Amount: { type:  DataTypes.DECIMAL},
+    Code: { type:  DataTypes.STRING},
+    //Parent properties
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},
     Error: { type:  DataTypes.STRING},
     CreatedBy: { type:  DataTypes.STRING},
     LastModifiedBy: { type:  DataTypes.STRING},
-    InstitutionCode: { type:  DataTypes.STRING},
-    InstitutionID: { type:  DataTypes.INTEGER},
     Name: { type:  DataTypes.STRING},
-},
-{tableName : 'Roles'},
- DISABLE_SEQUELIZE_DEFAULTS);
-module.exports = {Role};
+}, 
+{tableName : 'Liens'},DISABLE_SEQUELIZE_DEFAULTS);
+module.exports = {Lien};

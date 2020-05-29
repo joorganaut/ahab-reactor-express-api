@@ -1,12 +1,6 @@
-const {
-    USSDRequest
-} = require('../Core/models/gateways/USSDRequest');
-const {
-    USSDResponse
-} = require('../Core/models/gateways/USSDResponse');
-const {
-    ProcessPinRequest
-} = require('../Core/models/products/ProcessPinRequest');
+const {USSDRequest} = require('../Core/models/gateways/USSDRequest');
+const {USSDResponse} = require('../Core/models/gateways/USSDResponse');
+const {ProcessPinRequest} = require('../Core/models/products/ProcessPinRequest');
 const Responses = require('./common/Responses');
  const USSDCommand = require('../services/common/USSDCommand');
  const PinProcessor = require('../services/PinProcessor');
@@ -16,7 +10,7 @@ class USSDProcessorServer {
         this.res = res;
         this.next = next;
     }
-    ProcessRequest = async () => {
+    async ProcessRequest() {
         let request = new USSDRequest(this.req.body);
         let response = new USSDResponse({Error : ''});
         try {
@@ -53,7 +47,7 @@ class USSDProcessorServer {
         }
         this.res.send(response.ToString());
     }
-    ExecuteUSSDAction = async (request) => {
+    async ExecuteUSSDAction(request){
         let result = new USSDResponse({Error : ''});
         let pin = request.content.split('*');
         if (pin.length < 3) {
@@ -65,7 +59,7 @@ class USSDProcessorServer {
                 MSISDN : request.msisdn,
                 Pin : pin[3].replace("#", ""),
                 Network : request.src
-            })
+            });
             var p_response = await new PinProcessor().Execute(processPinRequest);
             result.Code = p_response.ResponseCode;
             result.Message = p_response.ResponseMessage;
@@ -73,6 +67,4 @@ class USSDProcessorServer {
         return result;
     }
 }
-module.exports = {
-    USSDProcessorServer
-}
+module.exports = {USSDProcessorServer};
