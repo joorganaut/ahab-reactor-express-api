@@ -20,21 +20,21 @@ const {BaseModel} = require('../../contracts/BaseModel')
 class UserModel extends BaseModel{
     constructor(props){
         super(props);
-        this.ID = props.ID;
-        this.Username = props.Username;
-        this.ProfileImage = props.ProfileImage;
-        this.FirstName = props.FirstName;
-        this.LastName = props.LastName;
-        this.Password = props.Password;
-        this.TransactionPin = props.TransactionPin;
-        this.ForcePasswordChange = props.ForcePasswordChange;
-        this.ForcePinChange = props.ForcePinChange;
-        this.DateOfBirth = props.DateOfBirth;
-        this.Email = props.Email;
-        this.IsAuthenticated = props.IsAuthenticated;
-        this.LastLoginDate = props.LastLoginDate;
-        this.NumberOfFailedAttempts = props.NumberOfFailedAttempts;
-        this.PhoneNumber = props.PhoneNumber;
+        this.ID =  props === undefined ? 0 : props.ID;
+        this.Username =  props === undefined ? '' : props.Username;
+        this.ProfileImage =  props === undefined ? '' : props.ProfileImage;
+        this.FirstName =  props === undefined ? '' : props.FirstName;
+        this.LastName =  props === undefined ? '' : props.LastName;
+        this.Password =  props === undefined ? '' : props.Password;
+        this.TransactionPin = props === undefined ? '' :  props.TransactionPin;
+        this.ForcePasswordChange = props === undefined ? false :  props.ForcePasswordChange;
+        this.ForcePinChange = props === undefined ? false :  props.ForcePinChange;
+        this.DateOfBirth = props === undefined ? '' :  props.DateOfBirth;
+        this.Email = props === undefined ? '' :  props.Email;
+        this.IsAuthenticated = props === undefined ? false :  props.IsAuthenticated;
+        this.LastLoginDate = props === undefined ? '' :  props.LastLoginDate;
+        this.NumberOfFailedAttempts = props === undefined ? 0 :  props.NumberOfFailedAttempts;
+        this.PhoneNumber = props === undefined ? '' :  props.PhoneNumber;
     }
 }
 module.exports = {UserModel}

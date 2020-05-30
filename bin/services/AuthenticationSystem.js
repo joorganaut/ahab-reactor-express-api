@@ -28,7 +28,7 @@ class AuthenticationSystem extends BaseProcessor{
     }
     static async GenerateToken(req, res){
         let response = {
-            Result : {},
+            Expiry : '',
             Code : '',
             Message : '',
             Error : ''
@@ -39,7 +39,8 @@ class AuthenticationSystem extends BaseProcessor{
             result = jwt.sign({
                 data: credentials
               }, 'secret', { expiresIn: '1h' });
-            response.Result = result;
+            response.Token = result;
+            response.Expiry = '1h';
             response.Code = Response.MessageResponse_SUCCESS.Code;
             response.Message = Response.MessageResponse_SUCCESS.Message;
         }
@@ -61,7 +62,7 @@ class AuthenticationSystem extends BaseProcessor{
         try {
             //Code to decode token
             let request = this.req.headers.authorization;
-            if (this.IsNullOrUndefined(request) && !this.roles.includes('*')) {
+            if (BaseProcessor.IsNullOrUndefined(request) && !this.roles.includes('*')) {
                 response.Result = result;
                 response.Code = Response.MessageResponse_AUTHENTICATION_ERROR.Code;
                 response.Message = Response.MessageResponse_AUTHENTICATION_ERROR.Message + ' Please provide a token';

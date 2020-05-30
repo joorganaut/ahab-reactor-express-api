@@ -5,12 +5,12 @@
         public long InstitutionID { get; set; }
 */
 const BaseRequest = require('../../contracts/BaseRequest')
-class ChangePasswordRequest extends BaseRequest{
+class ChangePinRequest extends BaseRequest{
     constructor(props){
         super(props);
-        this.LoginUsername =  props === undefined ? '' : props.LoginUsername;
-        this.OldPassword =  props === undefined ? '' : props.OldPassword;
-        this.NewPassword =  props === undefined ? '' : props.NewPassword;
+        this.LoginUsername = props === undefined ? '' :  props.LoginUsername;
+        this.OldPin = props === undefined ? '' :  props.OldPin;
+        this.NewPin = props === undefined ? '' :  props.NewPin;
     }
 }
-module.exports = {ChangePasswordRequest}
+module.exports = {ChangePinRequest};

@@ -1,13 +1,13 @@
 class HTTPConfig{
     constructor(props){
-        this.IP = props.IP;
-        this.Route = props.Route;
-        this.DataType = props.DataType;
-        this.Method = props.Method;
-        this.SOAPAction = props.SOAPAction;
-        this.ApiConfigName = props.ApiConfigName;
-        this.Headers = props.Headers;
-        this.Parameters = props.Parameters;
+        this.IP =   props === undefined ? '' : props.IP;
+        this.Route =   props === undefined ? '' : props.Route;
+        this.DataType =  props === undefined ? '' :  props.DataType;
+        this.Method =  props === undefined ? '' :  props.Method;
+        this.SOAPAction =   props === undefined ? '' : props.SOAPAction;
+        this.ApiConfigName =  props === undefined ? '' :  props.ApiConfigName;
+        this.Headers =   props === undefined ? [] : props.Headers;
+        this.Parameters =   props === undefined ? '' : props.Parameters;
         this.Url = this.IP + this.Route;
     }
 }

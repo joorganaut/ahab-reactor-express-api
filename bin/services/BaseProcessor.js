@@ -3,11 +3,31 @@ class BaseProcessor {
     constructor() {
 
     }
-    IsNullOrWhiteSpace(input) {
+    static Empty(){return '';}
+    static ToCharArray(word){
+        return word.split('');//.join(',');
+    }
+    static TryParseInt(str) {
+        let retValue = null;
+        let out = false;
+        if (str !== null) {
+            if (str.length > 0) {
+                if (!isNaN(str)) {
+                    retValue = parseInt(str);
+                    out = true;
+                }
+            }
+        }
+        return {
+            retValue,
+            out
+        };
+    }
+    static IsNullOrWhiteSpace(input) {
         if (typeof input === 'undefined' || input === null) return true;
         return input.replace(/\s/g, '').length < 1;
-    };
-    IsNullOrUndefined(input){
+    }
+    static IsNullOrUndefined(input){
         if (typeof input === 'undefined' || input === null) return true;
     }
     static async ExecuteGetWithUrl(httpConfig, request, error){

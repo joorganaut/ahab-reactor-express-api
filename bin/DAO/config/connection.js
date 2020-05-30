@@ -7,4 +7,4 @@ let password = process.env['DATABASE_PASSWORD'];
 let ssl = process.env['DATABASE_SSL']
 module.exports = {
     host, database, port, user, password, ssl
-}
+};

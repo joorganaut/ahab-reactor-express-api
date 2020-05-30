@@ -9,19 +9,20 @@
         public string BVN { get; set; }
         public AddressModel Address { get; set; }
 */
-const {BaseModel} = require('../../contracts/BaseModel')
+const {BaseModel} = require('../../contracts/BaseModel');
+const {AddressModel} = require('./AddressModel');
 class CustomerModel extends BaseModel{
     constructor(props){
-        super(props)
-        this.FirstName = props.FirstName;
-        this.LastName = props.LastName;
-        this.OtherName = props.OtherName;
-        this.PhoneNumber = props.PhoneNumber;
-        this.Email = props.Email;
-        this.Gender = props.Gender;
-        this.DateOfBirth = props.DateOfBirth;
-        this.BVN = props.BVN;
-        this.Address = props.Address;
+        super(props);
+        this.FirstName = props === undefined ? '' :  props.FirstName;
+        this.LastName = props === undefined ? '' :  props.LastName;
+        this.OtherName = props === undefined ? '' :  props.OtherName;
+        this.PhoneNumber = props === undefined ? '' :  props.PhoneNumber;
+        this.Email = props === undefined ? '' :  props.Email;
+        this.Gender = props === undefined ? 0 :  props.Gender;
+        this.DateOfBirth = props === undefined ? '' :  props.DateOfBirth;
+        this.BVN = props === undefined ? '' :  props.BVN;
+        this.Address = props === undefined ? new AddressModel() :  props.Address;
     }
 } 
 module.exports = {CustomerModel}

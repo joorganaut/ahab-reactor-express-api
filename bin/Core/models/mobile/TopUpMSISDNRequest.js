@@ -8,9 +8,9 @@ const BaseRequest = require('../../contracts/BaseRequest');
 class TopUpMSISDNRequest extends BaseRequest{
     constructor(props){
         super(props);
-        this.amount = props.amount;
-        this.msisdn = props.msisdn;
-        this.network = props.network;
+        this.amount =  props === undefined ? 0 :  props.amount;
+        this.msisdn =  props === undefined ? '' :  props.msisdn;
+        this.network =  props === undefined ? '' :  props.network;
     }
 }
-module.exports = {TopUpMSISDNRequest}
+module.exports = {TopUpMSISDNRequest};

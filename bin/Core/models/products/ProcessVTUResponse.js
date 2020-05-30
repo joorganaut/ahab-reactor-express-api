@@ -14,11 +14,11 @@
 const BaseResponse = require('../../contracts/BaseResponse');
 class ProcessVTUResponse extends BaseResponse{
     constructor(props){
-        super(props)
-        this.status = props.status;
-        this.message = props.message;
-        this.statuscode = props.statuscode;
-        this.requestId = props.requestId;
+        super(props);
+        this.status =   props === undefined ? '' : props.status;
+        this.message =   props === undefined ? '' : props.message;
+        this.statuscode =   props === undefined ? '' : props.statuscode;
+        this.requestId =   props === undefined ? '' : props.requestId;
     }
 }
-module.exports = {ProcessVTUResponse}
+module.exports = {ProcessVTUResponse};

@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var authenticatorRouter = require('./routes/authenticator');
 var apiRouter = require('./routes/api');
 var gatewayRouter = require('./routes/Gateway');
+var coreBankingRouter = require('./routes/CoreBanking');
 
 var app = express();
 
@@ -56,6 +57,7 @@ app.use('/users', usersRouter);
 app.use('/authenticate', authenticatorRouter);
 app.use('/api', apiRouter);
 app.use('/gateway', gatewayRouter);
+app.use('/corebanking', coreBankingRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

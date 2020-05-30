@@ -41,6 +41,8 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *         type: string
  *       Password:
  *         type: string
+ *       InstitutionCode:
+ *         type: string
  *   LoginResponse:
  *     properties:
  *       IsAuthenticated:
@@ -108,13 +110,15 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *       ForcePinChange:
  *         type: boolean 
  *       DateOfBirth:
- *         type: date
+ *         type: string
+ *         format: date
  *       Email:
  *         type: string
  *       IsAuthenticated:
  *         type: boolean 
  *       LastLoginDate:
- *         type: date
+ *         type: string
+ *         format: date
  *       NumberOfFailedAttempts:
  *         type: number
  *       PhoneNumber:
@@ -134,13 +138,16 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *       Gender:
  *         type: number 
  *       DateOfBirth:
- *         type: date
+ *         type: string
+ *         format: date
  *       BVN:
  *         type: string
  *       Address:
  *         $ref: '#/definitions/AddressModel'
  *   AccountModel:
  *     properties:
+ *       Name:
+ *         type: string
  *       AccountNumber:
  *         type: string
  *       ProductID:
@@ -197,6 +204,10 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *     properties:
  *       Pin:
  *         type: number
+ *       UserID:
+ *         type: number
+ *       InstitutionCode:
+ *         type: string
  *   ValidateUserPinResponse:
  *     properties:
  *       Code:
@@ -213,6 +224,8 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *         type: number
  *       VTUUserID:
  *         type: number
+ *       InstitutionCode:
+ *         type: string
  *   FundVTUWalletResponse:
  *     properties:
  *       Code:
@@ -229,6 +242,8 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *         type: string
  *       NewPassword:
  *         type: string
+ *       InstitutionCode:
+ *         type: string
  *   ChangePasswordResponse:
  *     properties:
  *       Code:
@@ -241,8 +256,62 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *     properties:
  *       LoginUsername:
  *         type: string
+ *       InstitutionCode:
+ *         type: string
  *   ResetPasswordResponse:
  *     properties:
+ *       Code:
+ *         type: string
+ *       Message:
+ *         type: string
+ *       Error:
+ *         type: string  
+ *   ChangePinRequest: 
+ *     properties:
+ *       LoginUsername:
+ *         type: string
+ *       OldPin:
+ *         type: string
+ *       NewPin:
+ *         type: string
+ *       InstitutionCode:
+ *         type: string
+ *   ChangePinResponse:
+ *     properties:
+ *       Code:
+ *         type: string
+ *       Message:
+ *         type: string
+ *       Error:
+ *         type: string 
+ *   ResetPinRequest:
+ *     properties:
+ *       LoginUsername:
+ *         type: string
+ *       InstitutionCode:
+ *         type: string
+ *   ResetPinResponse:
+ *     properties:
+ *       Code:
+ *         type: string
+ *       Message:
+ *         type: string
+ *       Error:
+ *         type: string 
+ *   TokenRequest:
+ *     properties:
+ *       Username:
+ *         type: string
+ *       Password:
+ *         type: string
+ *       InstitutionCode:
+ *         type: string
+ *   TokenResponse:
+ *     properties:
+ *       Token:
+ *         type: string
+ *       Expiry:
+ *         type: string
  *       Code:
  *         type: string
  *       Message:
@@ -287,6 +356,46 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *         type: string
  *       Error:
  *         type: string 
+ *   AddAccountRequest:
+ *     properties:
+ *       Name:
+ *         type: string
+ *       AccountNumber:
+ *         type: string
+ *       ProductID:
+ *         type: number
+ *       AccountBalance:
+ *         type: number 
+ *       CustomerID:
+ *         type: number
+ *       IsGL:
+ *         type: boolean
+ *       MinimumBalance:
+ *         type: number 
+ *       HasOverDraft:
+ *         type: boolean
+ *       OverDraftLimit:
+ *         type: number
+ *       OverDraftInterestRate:
+ *         type: number 
+ *       OverDraftTenor:
+ *         type: number
+ *       DepositInterestRate:
+ *         type: number
+ *       Status:
+ *         type: number 
+ *       DepositTenor:
+ *         type: number 
+ *   AddAccountResponse:
+ *     properties:
+ *       Code:
+ *         type: string
+ *       Message:
+ *         type: string
+ *       AccountNumber:
+ *         type: string
+ *       Error:
+ *         type: string  
  */
 
 /**
@@ -313,7 +422,7 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  */
 router.post('/MobileMiddleware/Authentication/ValidateInstitution', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
-        await new InstitutionSystem(response).AuthenticateInstitution();
+        await new InstitutionSystem(response).AuthenticateInstitutionAsync();
     });
 });
 
@@ -344,7 +453,7 @@ router.post('/MobileMiddleware/Authentication/ValidateInstitution', async functi
 /* POST retrieve all institution. */
 router.post('/MobileMiddleware/Authentication/Login', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
-        await new UserSystem(response).Login();
+        await new UserSystem(response).LoginAsync();
     });
 });
 
@@ -374,7 +483,7 @@ router.post('/MobileMiddleware/Authentication/Login', async function(req, res, n
 /* POST retrieve all institution. */
 router.post('/MobileMiddleware/Authentication/ChangePassword', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
-        await new UserSystem(response).ChangePassword();
+        await new UserSystem(response).ChangePasswordAsync();
     });
 });
 
@@ -404,7 +513,68 @@ router.post('/MobileMiddleware/Authentication/ChangePassword', async function(re
 /* POST retrieve all institution. */
 router.post('/MobileMiddleware/Authentication/ResetPassword', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
-        await new UserSystem(response).ResetPassword();
+        await new UserSystem(response).ResetPasswordAsync();
+    });
+});
+
+
+/**
+ * @swagger
+ * /api/MobileMiddleware/Authentication/ChangePin:
+ *   post:
+ *     tags:
+ *       - Pin Change, User
+ *     description: User changes pin
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: ChangePinRequest
+ *         description: Change pin Request Object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/ChangePinRequest'
+ *     responses:
+ *       200:
+ *         name: ChangePinResponse
+ *         description: returns a response object signifying success or failure with reason
+ *         schema: 
+ *           $ref: '#/definitions/ChangePinResponse'
+ */
+/* POST retrieve all institution. */
+router.post('/MobileMiddleware/Authentication/ChangePin', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
+        await new UserSystem(response).ChangePinAsync();
+    });
+});
+
+/**
+ * @swagger
+ * /api/MobileMiddleware/Authentication/ResetPin:
+ *   post:
+ *     tags:
+ *       - Pin Reset, User
+ *     description: User resets pin
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: ResetPinRequest
+ *         description: Reset pin Request Object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/ResetPinRequest'
+ *     responses:
+ *       200:
+ *         name: ResetPinResponse
+ *         description: returns a response object signifying success or failure with reason
+ *         schema: 
+ *           $ref: '#/definitions/ResetPinResponse'
+ */
+/* POST retrieve all institution. */
+router.post('/MobileMiddleware/Authentication/ResetPin', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
+        await new UserSystem(response).ResetPinAsync();
     });
 });
 
@@ -434,7 +604,7 @@ router.post('/MobileMiddleware/Authentication/ResetPassword', async function(req
 /* POST retrieve all institution. */
 router.post('/MobileMiddleware/Registration/Register', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
-        await new InstitutionSystem(response).RegisterInstitution();
+        await new InstitutionSystem(response).RegisterInstitutionAsync();
     });
 });
 
@@ -463,7 +633,7 @@ router.post('/MobileMiddleware/Registration/Register', async function(req, res, 
  */
 router.post('/MobileMiddleware/Registration/RegisterIndividual', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
-        await new UserSystem(response).RegisterIndividual();
+        await new UserSystem(response).RegisterIndividualAsync();
     });
 });
 
@@ -484,7 +654,7 @@ router.post('/MobileMiddleware/Registration/RegisterIndividual', async function(
  *         type:
  *           string
  *       - name: id
- *         description: Request id
+ *         description: Institution id
  *         in: path
  *         required: true
  *         type:
@@ -513,6 +683,12 @@ router.get('/MobileMiddleware/Registration/ActivateAccount', async function(req,
  *     produces:
  *       - application/json
  *     parameters:
+ *       - in: header
+ *         name: authorization
+ *         type: string
+ *         required: true
+ *         description: authorization token e.g. 'Bearer {token}'
+ *         examples: 'Bearer {token}'
  *       - name: TopUpMSISDNRequest
  *         description: Top-up MSISDN Request Object
  *         in: body
@@ -542,6 +718,12 @@ router.post('/MobileMiddleware/VTUService/TopUpMSISDN', async function(req, res,
  *     produces:
  *       - application/json
  *     parameters:
+ *       - in: header
+ *         name: authorization
+ *         type: string
+ *         required: true
+ *         description: authorization token e.g. 'Bearer {token}'
+ *         examples: 'Bearer {token}'
  *       - name: ValidateUserPinRequest
  *         description: Validate User Pin Request Object
  *         in: body
@@ -571,6 +753,12 @@ router.post('/MobileMiddleware/VTUService/ValidateTransactionPin', async functio
  *     produces:
  *       - application/json
  *     parameters:
+ *       - in: header
+ *         name: authorization
+ *         type: string
+ *         required: true
+ *         description: authorization token e.g. 'Bearer {token}'
+ *         examples: 'Bearer {token}'
  *       - name: FundVTUWalletRequest
  *         description: Fund VTU Wallet Request Object
  *         in: body

@@ -1,8 +1,8 @@
 const BaseResponse = require('../../contracts/BaseResponse');
 class TopUpMSISDNResponse extends BaseResponse{
     constructor(props){
-        super(props)
+        super(props);
         
     }
 }
-module.exports = {TopUpMSISDNResponse}
+module.exports = {TopUpMSISDNResponse};

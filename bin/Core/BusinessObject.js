@@ -3,7 +3,7 @@ const {
     Sequelize,
     Model
 } = require('sequelize');
-console.log('This is the db host: ' + connection.host + ' ssl: '+connection.ssl === true)
+console.log('This is the db host: ' + connection.host + ' ssl: '+connection.ssl === true);
 class BusinessObject extends Model {
     constructor(model) {
         super(model);
@@ -16,15 +16,15 @@ let useSSL =()=>{
     {
         result = {
             ssl : {rejectUnauthorized: false}
-        }
+        };
     }
     else {
         result = {
             ssl : false
-        }
+        };
     }
     return result;
-}
+};
 let sequelize = new Sequelize({
     database: connection.database,
     username: connection.user,
@@ -45,4 +45,4 @@ let sequelize = new Sequelize({
 module.exports = {
     BusinessObject,
     sequelize
-}
+};

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const {USSDProcessorServer} = require('../bin/services/USSDProcessorServer');
-
+var {AuthenticationSystem} = require('../bin/services/AuthenticationSystem');
+var {AccountSystem} = require('../bin/services/AccountSystem');
 /**
  * @swagger
  * definitions:
@@ -33,28 +33,35 @@ const {USSDProcessorServer} = require('../bin/services/USSDProcessorServer');
 
 /**
  * @swagger
- * /gateway/USSDServer:
+ * /corebanking/Account/AddCustomerAccount:
  *   post:
  *     tags:
- *       - USSD
- *     description: process USSD requests
+ *       - Add, Customer Account
+ *     description: add account to customer 
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: USSDRequest
- *         description: process USSD Request Object
+ *       - in: header
+ *         name: authorization
+ *         type: string
+ *         required: true
+ *         description: authorization token e.g. 'Bearer {token}'
+ *         example: 'Bearer {token}'
+ *       - name: AddAccountRequest
+ *         description: Add Account Request Object
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/USSDRequest'
+ *           $ref: '#/definitions/AddAccountRequest'
  *     responses:
  *       200:
  *         description: returns a response object signifying success or failure with reason
  *         schema: 
- *           $ref: '#/definitions/USSDResponse'
+ *           $ref: '#/definitions/AddAccountResponse'
  */
-router.post('/USSDServer', async function(req, res, next) {
-    let server = new USSDProcessorServer(req, res, next);
-    await server.ProcessRequest();
+router.post('/Account/AddCustomerAccount', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["CoreBanking"], async (response)=>{
+        await new AccountSystem(response).OpenAccountAsync();
+    });
 });
 module.exports = router;

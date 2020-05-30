@@ -1,15 +1,12 @@
 const Responses = require('../services/common/Responses');
-const {
-    Op,
-    Sequelize,
-    QueryTypes 
-} = require('sequelize');
+const {BusinessObject} = require('../Core/BusinessObject');
 
 addInputParameter = (params, paramName, value) => {
     if (params == null) {
         params = {};
     }
-    return params[paramName] = value;
+    params[paramName] = value;
+    return params[paramName];
 };
 Get = async (T, id) => {
     let result = {};
@@ -26,14 +23,13 @@ Get = async (T, id) => {
             });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error);
     }
     return result;
-}
+};
 GetAll = async (T, params) => {
     var result = {};        
     try {
-        console.log('i go the hell here Get All records')
+        console.log('i go the hell here Get All records');
         await T.findAll({
             limit: params.pageSize,
             offset: params.page * params.pageSize,
@@ -48,17 +44,16 @@ GetAll = async (T, params) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error);
     }
     return result;
 };
 GetAllNoPaging = async (T) => {
     var result = {};
     try {
-        console.log('i go the hell here Get All records')
+        console.log('i go the hell here Get All records');
         await T.findAll().then(rows => {
             if (rows !== null) {
                 result = rows;
@@ -67,17 +62,16 @@ GetAllNoPaging = async (T) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error)
     }
     return result;
 };
 GetAll = async (T, params, count) => {
     var result = {};
     try {        
-        console.log('i go the hell here Get All records')
+        console.log('i go the hell here Get All records');
         await T.findAndCountAll({
             limit: params.pageSize,
             offset: params.page * params.pageSize,
@@ -93,10 +87,9 @@ GetAll = async (T, params, count) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error);
     }
     return {result, count};
 };
@@ -104,7 +97,7 @@ GetAll = async (T, params, count) => {
 GetAllBy = async (T, params) => {
     var result = {};
     try {
-        console.log('i go the hell here Get All records: ' + params)
+        console.log('i go the hell here Get All records: ' + params);
         await T.findAll({
             where: params.query,
             limit: params.pagingParams.pageSize,
@@ -120,17 +113,16 @@ GetAllBy = async (T, params) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error);
     }
     return result;
 };
 GetAllByWithCallback = async (T, params, callback) => {
     var result = {};
     try {
-        console.log('i go the hell here Get All records: ' + params)
+        console.log('i go the hell here Get All records: ' + params);
         await T.findAndCountAll({
             where: params.query,
             limit: params.pagingParams.pageSize,
@@ -142,16 +134,15 @@ GetAllByWithCallback = async (T, params, callback) => {
             if (res !== null) {
                 result = res.rows;
                 count = res.count;
-                callback({result, count})
+                callback({result, count});
             } else {
                 throw Responses.MessageResponse_TRANSACTION_INVALID.Message + ': they are no records';
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error)
     }
     return {result, count};
 };
@@ -167,7 +158,7 @@ GetAllByNoPagingNoWhere = async (T, params) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         console.log(error.message);
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
@@ -182,13 +173,13 @@ GetAllByNoPagingNoWhereWithCallback = async (T, params, callback) => {
         await T.findAll(params).then(async rows => {
             if (rows !== null) {
                 result = rows;
-                await callback(rows)
+                await callback(rows);
             } else {
                 throw Responses.MessageResponse_TRANSACTION_INVALID.Message + ': they are no records';
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         console.log(error.message);
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
@@ -209,7 +200,7 @@ GetAllByNoPaging = async (T, params) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         console.log(error.message);
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
@@ -236,18 +227,17 @@ GetAllBy = async (T, params, count) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error);
     }
     return {result, count};
 };
-Save = async (T, params) => {    
+Save = async (T, params, transaction) => {    
     var result = {};
     try {
         console.log('i go the hell here Get All records: ' + params);
-        await T.create(params).then(rows => {
+        await T.create(params, transaction).then(rows => {
             if (rows !== null) {
                 console.log(JSON.stringify(rows));
                 result = rows;
@@ -256,18 +246,17 @@ Save = async (T, params) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error);
     }
     return result;
 };
-Update = async (params) => {    
+Update = async (params, transaction) => {    
     var result = {};
     try {
         console.log('i go the hell here Get All records: ' + params);
-        await params.save().then(rows => {
+        await params.save(transaction).then(rows => {
             if (rows !== null) {
                 console.log(JSON.stringify(rows));
                 result = rows;
@@ -276,10 +265,9 @@ Update = async (params) => {
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error);
     }
     return result;
 };
@@ -296,10 +284,9 @@ Delete = async(params)=>{
             }
         }).error(err => {
             throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + err.Message;
-        })
+        });
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
-        console.log(error);
     }
     return result;
 };
@@ -318,15 +305,14 @@ FindOne = async (T, params) => {
             });
     } catch (error) {
         return null;
-        console.log(error);
     }
     return result;
 };
 Query = async(T, params)=>{
     var result = {};
     try {
-        console.log('i go the hell here Get All records: ' + params)
-        const model = T.name.substring(0, T.name.length - 1)
+        console.log('i go the hell here Get All records: ' + params);
+        const model = T.name.substring(0, T.name.length - 1);
         await T.sequelize.query({
             query: params.query,
             // model: model,
@@ -344,7 +330,36 @@ Query = async(T, params)=>{
     } catch (error) {
         throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
     }
-    return {result};
+    return result;
+};
+ExecuteTransactions = async(transactions)=>{
+    let result = {};
+    let {sequelize} = require('../Core/BusinessObject');
+    try{
+    result = await sequelize.transaction().then(async(t)=>{
+        if(transactions.length > 0){
+            let dbObject = {};
+            transactions.forEach(async element =>  {
+                await element.Action(dbObject).then(async x=>{
+                    if(element.DBAction === 'Save'){
+                        await element.DBObjectType.create(element.DBObject, { transaction: t }).then(res=>{
+                            dbObject = res;
+                        });
+                    }
+                    if(element.DBAction === 'Update'){
+                         await element.DBObjectType.update(element.DBObject, { transaction: t });
+                    }
+                }
+                );
+                
+            });
+            return dbObject;
+        }
+    });
+    }catch(error){
+        throw Responses.MessageResponse_SYSTEM_MALFUNCTION.Message + ' ' + error.message;
+    }
+    return result;
 };
 module.exports = {
     GetAll,
@@ -360,5 +375,6 @@ module.exports = {
     Delete,
     FindOne,
     Query,
-    addInputParameter
+    addInputParameter,
+    ExecuteTransactions
 };

@@ -16,20 +16,20 @@ public  string AccountNumber { get; set; }
 const {BaseModel} = require('../../contracts/BaseModel')
 class AccountModel extends BaseModel{
     constructor(props){
-        super(props)
-        this.AccountNumber = props.AccountNumber;
-        this.ProductID = props.ProductID;
-        this.AccountBalance = props.AccountBalance;
-        this.CustomerID = props.CustomerID;
-        this.IsGL = props.IsGL;
-        this.MinimumBalance = props.MinimumBalance;
-        this.HasOverDraft = props.HasOverDraft;
-        this.OverDraftLimit = props.OverDraftLimit;
-        this.OverDraftInterestRate = props.OverDraftInterestRate;
-        this.OverDraftTenor = props.OverDraftTenor;
-        this.DepositInterestRate = props.DepositInterestRate;
-        this.Status = props.Status;
-        this.DepositTenor = props.DepositTenor;
+        super(props);
+        this.AccountNumber = props === undefined ? '' :  props.AccountNumber;
+        this.ProductID = props === undefined ? 0 :  props.ProductID;
+        this.AccountBalance = props === undefined ? 0 :  props.AccountBalance;
+        this.CustomerID = props === undefined ? 0 :  props.CustomerID;
+        this.IsGL = props === undefined ? false :  props.IsGL;
+        this.MinimumBalance = props === undefined ? 0 :  props.MinimumBalance;
+        this.HasOverDraft = props === undefined ? false :  props.HasOverDraft;
+        this.OverDraftLimit = props === undefined ? 0 :  props.OverDraftLimit;
+        this.OverDraftInterestRate = props === undefined ? 0 :  props.OverDraftInterestRate;
+        this.OverDraftTenor = props === undefined ? 0 :  props.OverDraftTenor;
+        this.DepositInterestRate = props === undefined ? 0 :  props.DepositInterestRate;
+        this.Status = props === undefined ? '' :  props.Status;
+        this.DepositTenor = props === undefined ? 0 :  props.DepositTenor;
     }
 }
 module.exports = {AccountModel}

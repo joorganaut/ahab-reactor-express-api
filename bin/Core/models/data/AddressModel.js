@@ -6,11 +6,11 @@
 const {BaseModel} = require('../../contracts/BaseModel');
 class AddressModel extends BaseModel{
     constructor(props){
-        super(props)
-        this.Street = props.Street;
-        this.City = props.City;
-        this.State = props.State;
-        this.Country = props.Country;
+        super(props);
+        this.Street = props === undefined ? '' :  props.Street;
+        this.City = props === undefined ? '' :  props.City;
+        this.State = props === undefined ? '' :  props.State;
+        this.Country = props === undefined ? '' :  props.Country;
     }
 }
 module.exports = {AddressModel}

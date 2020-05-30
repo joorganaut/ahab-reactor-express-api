@@ -24,18 +24,18 @@ const {BaseModel} = require('../../contracts/BaseModel')
 class InstitutionModel extends BaseModel{
     constructor(props){
         super(props);
-        this.ContactEmail = props.ContactEmail;
-        this.ContactPhonenumber = props.ContactPhonenumber;
-        this.ContactAddress = props.ContactAddress;
-        this.DecryptionKey = props.DecryptionKey;
-        this.PassPhrase = props.PassPhrase;
-        this.Password = props.Password;
-        this.EncryptionKey = props.EncryptionKey;
-        this.LocalConnectionString = props.LocalConnectionString;
-        this.RemoteConnectionString = props.RemoteConnectionString;
-        this.Industry = props.Industry;
-        this.ShortName = props.ShortName;
-        this.Name = props.Name;
+        this.ContactEmail = props === undefined ? '' :  props.ContactEmail;
+        this.ContactPhonenumber = props === undefined ? '' :  props.ContactPhonenumber;
+        this.ContactAddress = props === undefined ? '' :  props.ContactAddress;
+        this.DecryptionKey = props === undefined ? '' :  props.DecryptionKey;
+        this.PassPhrase = props === undefined ? '' :  props.PassPhrase;
+        this.Password = props === undefined ? '' :  props.Password;
+        this.EncryptionKey = props === undefined ? '' :  props.EncryptionKey;
+        this.LocalConnectionString = props === undefined ? '' :  props.LocalConnectionString;
+        this.RemoteConnectionString = props === undefined ? '' :  props.RemoteConnectionString;
+        this.Industry = props === undefined ? '' :  props.Industry;
+        this.ShortName = props === undefined ? '' :  props.ShortName;
+        this.Name = props === undefined ? '' :  props.Name;
     }
 }
 module.exports = {InstitutionModel}

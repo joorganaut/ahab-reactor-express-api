@@ -1,7 +1,7 @@
 const BaseResponse = require('../../contracts/BaseResponse');
-class ChangePasswordResponse extends BaseResponse{
+class ResetPinResponse extends BaseResponse{
     constructor(props){
         super(props);
     }
 }
-module.exports = {ChangePasswordResponse}
+module.exports = {ResetPinResponse};
