@@ -7,6 +7,8 @@ const {Account} = require('../Core/data/Account');
 const saltedMd5 = require('salted-md5');
 const TopUpMSISDNRequest = require('../Core/models/mobile/TopUpMSISDNRequest').TopUpMSISDNRequest;
 const TopUpMSISDNResponse = require('../Core/models/mobile/TopUpMSISDNResponse').TopUpMSISDNResponse;
+const {SinglePostRequest} = require('../Core/models/CoreBanking/SinglePostRequest');
+const {SinglePostResponse} = require('../Core/models/CoreBanking/SinglePostResponse');
 const ValidateUserPinRequest = require('../Core/models/mobile/ValidateUserPinRequest').ValidateUserPinRequest;
 const ValidateUserPinResponse = require('../Core/models/mobile/ValidateUserPinResponse').ValidateUserPinResponse;
 const FundVTUWalletRequest = require('../Core/models/mobile/FundVTUWalletRequest').FundVTUWalletRequest;
@@ -16,7 +18,7 @@ class VTUSystem extends BaseSystem{
         super(props);
         this.response = response;
         this.VTUProcessor = VTUProcessor;
-        this.PostingSystem = new PostingSystem();
+        this.PostingSystem = new PostingSystem(this.response);
         this.VTUProduct = this.RetrieveByParameter(Product, {});
     }
     async TopUpMSISDN(request, response){
@@ -49,7 +51,7 @@ class VTUSystem extends BaseSystem{
                 console.log(JSON.stringify(usr))
                 if(usr.TransactionPin === saltedMd5(request.Pin)){
                     response.Code = this.Responses.MessageResponse_SUCCESS.Code;
-                    response.Message = `${this.Responses.MessageResponse_SUCCESS.Message} xxx`;
+                    response.Message = `${this.Responses.MessageResponse_SUCCESS.Message}`;
                 }else{
                     response.Code = this.Responses.MessageResponse_AUTHENTICATION_ERROR.Code;
                     response.Message = `${this.Responses.MessageResponse_AUTHENTICATION_ERROR.Message}: ${'Invalid Pin'}`;
@@ -71,16 +73,21 @@ class VTUSystem extends BaseSystem{
     }
     async FundVTUWallet(request, response){
         try{
-            let p = {ExpenseAccount : ""};
-            let debitAccount = await this.RetrieveByParameter(Account, {ExpenseAccount : p.ExpenseAccount});
+            let p = {ExpenseAccount : "100000000123"}; //retrieve product expense account
+            let debitAccount = await this.RetrieveByParameter(Account, {AccountNumber : p.ExpenseAccount});
+            if(BaseSystem.IsNullOrUndefined(debitAccount)){
+                response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+            response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${'Unable to retrieve Expense Account'}`;
+            }
             let postRequest = new SinglePostRequest(
             {
                 Amount : request.Amount,
                 CreditAccount : request.AccountNumber,
                 DebitAccount : debitAccount.AccountNumber,
-                Narration : `VTU Funding of User ${request.VTUUserID}`
+                Narration : `VTU Funding of User ${request.VTUUserID}`,
+                InstitutionCode : request.InstitutionCode
             });
-            let postingResponse = await this.PostingSystem.SinglePostAsync(postRequest);
+            let postingResponse = await this.PostingSystem.SinglePost(postRequest, response);
             response.ResponseCode = postingResponse.ResponseCode;
             response.ResponseMessage = postingResponse.ResponseMessage;
         }catch(e){

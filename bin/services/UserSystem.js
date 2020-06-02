@@ -13,7 +13,6 @@ const {AddressModel} = require('../Core/models/data/AddressModel');
 const BaseSystem = require('./BaseSystem');
 const saltedMd5 = require('salted-md5');
 const {DBTransactionParameter} = require('../Core/contracts/DBTransactionParameter');
-const {InstitutionSystem} = require('./InstitutionSystem');
 const {CustomerSystem} = require('./CustomerSystem');
 const {AccountSystem} = require('./AccountSystem');
 const {SecuritySystem} = require('./SecuritySystem');
@@ -38,7 +37,31 @@ class UserSystem extends BaseSystem{
         this.CustomerSystem = new CustomerSystem(response, props);
         this.AccountSystem = new AccountSystem(response, props);
     }
-    
+    async ValidateInstitution(code, password) {
+        let thisInstitution = null;
+        try {
+            thisInstitution = await this.RetrieveByParameter(Institution, {
+                Code: code
+            });
+            if (thisInstitution === null) {
+                thisInstitution = null;
+                this.Error = "Invalid Institution Code";
+                return thisInstitution;
+            }
+            if (thisInstitution.Password !== saltedMd5(password)) {
+                thisInstitution = null;
+                this.Error = "Invalid Authentication";
+                return thisInstitution;
+            } else if (thisInstitution.IsEnabled === false) {
+                thisInstitution = null;
+                this.Error = "Institution is disabled";
+                return thisInstitution;
+            }
+        } catch (e) {
+            this.Error = e.message;
+        }
+        return thisInstitution;
+    }
     async Login(request, response){
         try{
             let institution = await this.RetrieveByParameter(Institution, {Code: request.InstitutionCode});
@@ -67,7 +90,8 @@ class UserSystem extends BaseSystem{
             let customer = await this.RetrieveByParameter(Customer, {UserID : usr.ID});
             if (customer !== null)
             {
-                let customerAccounts = await this.AccountSystem.RetrieveMany({CustomerID : customer.ID});
+                let customerAccounts = await this.RetrieveMany(Account, {CustomerID : customer.ID});
+                response.AccountModels = [];
                 response.AccountModels.push(customerAccounts.filter(x =>
                 {
                     return new AccountModel(x);
@@ -95,6 +119,9 @@ class UserSystem extends BaseSystem{
                 response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${this.Error}`;
             }
         }catch(e){
+            response.InstitutionModel = null;
+            response.UserModel = null;
+            response.CustomerModel = null;
             response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
             response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e.message}`;
         }
@@ -326,6 +353,7 @@ class UserSystem extends BaseSystem{
                         CustomerID : cus.ID,
                         IsGLProduct : VTUProducts.IsGLProduct,
                         CurrencyID : 1,
+                        Currency : 'NGN',
                         ProductID : VTUProducts.ID});
                     await this.Save(Account, account, { transaction: t}).then(async acc=>{
                         await this.AccountSystem.GenerateAccountNumber(VTUProducts, acc.ID).then(accountNumber=>{
@@ -368,7 +396,7 @@ class UserSystem extends BaseSystem{
                 //Validate institution
                 let code = request.InstitutionCode;
                 let password = request.InstitutionPassword;
-                let institution = await new InstitutionSystem(this.response).ValidateInstitution(code, password);
+                let institution = await this.ValidateInstitution(code, password);
                 //institution = {ID : 1, Code : '1223334444', Name : 'Test Institution', ShortName : 'TI'};
                 if (institution !== null)
                 {
