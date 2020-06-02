@@ -1,8 +1,9 @@
-const BaseProcessor = require('./BaseProcessor');
+const BaseSystem = require('./BaseSystem');
+const {Institution} = require('../Core/data/Institution');
 const T = require('../DAO/BusinessObjectDAO');
 const jwt = require('jsonwebtoken');
 const Response = require('./common/Responses');
-class AuthenticationSystem extends BaseProcessor{
+class AuthenticationSystem extends BaseSystem{
     constructor(req, res, next, roles, callback) {
         super(req, res, next, roles, callback);
         this.req = req;
@@ -22,9 +23,13 @@ class AuthenticationSystem extends BaseProcessor{
         }
         return result;
     }
-    async IsAuthenticated(data, institutionID){
+    async IsAuthenticated(data){
         let result = true;
         //Set InstitutionID
+        var institution = await this.RetrieveByParameter(Institution, {Code : data.InstitutionCode});
+        if(BaseSystem.IsNullOrUndefined(institution)){
+            return false;
+        }
         return result;
     }
     static async GenerateToken(req, res){
@@ -64,7 +69,7 @@ class AuthenticationSystem extends BaseProcessor{
         try {
             //Code to decode token
             let request = this.req.headers.authorization;
-            if (BaseProcessor.IsNullOrUndefined(request) && !this.roles.includes('*')) {
+            if (BaseSystem.IsNullOrUndefined(request) && !this.roles.includes('*')) {
                 response.Result = result;
                 response.Code = Response.MessageResponse_AUTHENTICATION_ERROR.Code;
                 response.Message = Response.MessageResponse_AUTHENTICATION_ERROR.Message + ' Please provide a token';
@@ -79,7 +84,7 @@ class AuthenticationSystem extends BaseProcessor{
                 let token = request.split(' ')[1];
                 let decode = jwt.verify(token, 'secret');
                 let data = decode.data;
-                if (this.IsAuthenticated(data, response.InstitutionID) && this.IsInRole(data)) {
+                if (await this.IsAuthenticated(data) && await this.IsInRole(data)) {
                     response.Result = result;
                     response.Code = Response.MessageResponse_SUCCESS.Code;
                     response.Message = Response.MessageResponse_SUCCESS.Message;
