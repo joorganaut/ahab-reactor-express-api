@@ -7,11 +7,13 @@ require('dotenv').config({path: __dirname + '/.env'})
 var app = require('../app');
 var debug = require('debug')('express.api:server');
 var http = require('http');
-
+var https = require('https');
+// var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
+// var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
 /**
  * Schema Update
  */
-const SchemaUpdate = require('./services/common/SchemaUpdate')
+const SchemaUpdate = require('./services/common/SchemaUpdate');
 SchemaUpdate.SchemaUpdate();
 SchemaUpdate.PopulateRoles().then(()=>{});
 SchemaUpdate.PopulateUserFunctions().then(()=>{})
@@ -27,6 +29,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+var httpsServer = https.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.

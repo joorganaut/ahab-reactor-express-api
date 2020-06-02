@@ -1,4 +1,5 @@
 var os = require('os');
+require('dotenv').config({path: __dirname + '/.env'})
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -15,7 +16,7 @@ var gatewayRouter = require('./routes/Gateway');
 var coreBankingRouter = require('./routes/CoreBanking');
 
 var app = express();
-
+var hostname = process.env['BASE_URL'];
 // swagger definition
 var swaggerDefinition = {
   info: {
@@ -23,7 +24,7 @@ var swaggerDefinition = {
     version: '2.0.0',
     description: 'Documentation for the Ahab Reactor',
   },
-  host: os.hostname(),
+  host: hostname,
   // host: 'localhost:5250',
   // host: 'ahab-reactor.herokuapp.com',
   basePath: '/',
