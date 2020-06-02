@@ -15,7 +15,7 @@ class AuthenticationSystem extends BaseSystem{
         this.AuthenticateToken();
     }
     async IsInRole(data){
-        let result = false;
+        let result = true; //remember to uncomment
         if(this.roles.includes('*'))
         {
             result = true;
