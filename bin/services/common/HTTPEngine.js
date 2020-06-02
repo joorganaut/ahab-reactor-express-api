@@ -17,18 +17,20 @@ class HTTPEngine{
 
     }
     static ExecuteGet=async(httpConfig, request, error)=>{
+      let result = {};
         await axios.get(httpConfig.Url, {
             params: request
           })
           .then(function (response) {
-            return response;
+            result = response;
           })
           .catch(function (err) {
-            return error = err;
+            result = err;
           })
           .finally(function () {
             // always executed
           });
+          return result;
     }
 }
 module.exports = HTTPEngine

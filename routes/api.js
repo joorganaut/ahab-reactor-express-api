@@ -192,6 +192,8 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *         type: string
  *       network:
  *         type: string
+ *       source:
+ *         type: number
  *   TopUpMSISDNResponse:
  *     properties:
  *       Code:
@@ -223,6 +225,8 @@ var {VTUSystem} = require('../bin/services/VTUSystem');
  *       Amount:
  *         type: number
  *       VTUUserID:
+ *         type: number
+ *       Source:
  *         type: number
  *       InstitutionCode:
  *         type: string
@@ -704,7 +708,7 @@ router.get('/MobileMiddleware/Registration/ActivateAccount', async function(req,
  */
 router.post('/MobileMiddleware/VTUService/TopUpMSISDN', async function(req, res, next){
     new AuthenticationSystem(req, res, next, ["admin", "posting", "topup"], async (response)=>{
-        await new VTUSystem(response).TopUpMSISDN();
+        await new VTUSystem(response).TopUpMSISDNAsync();
     });
 });
 
@@ -739,7 +743,7 @@ router.post('/MobileMiddleware/VTUService/TopUpMSISDN', async function(req, res,
  */
 router.post('/MobileMiddleware/VTUService/ValidateTransactionPin', async function(req, res, next){
     new AuthenticationSystem(req, res, next, ["admin", "posting", "system"], async (response)=>{
-        await new VTUSystem(response).TopUpMSISDN();
+        await new VTUSystem(response).ValidateTransactionPinAsync();
     });
 });
 
@@ -774,7 +778,7 @@ router.post('/MobileMiddleware/VTUService/ValidateTransactionPin', async functio
  */
 router.post('/MobileMiddleware/VTUWalletFunding/FundVTUWallet', async function(req, res, next){
     new AuthenticationSystem(req, res, next, ["admin", "posting", "system"], async (response)=>{
-        await new VTUSystem(response).TopUpMSISDN();
+        await new VTUSystem(response).FundVTUWalletAsync();
     });
 });
 module.exports = router;

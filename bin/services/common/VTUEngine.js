@@ -1,9 +1,9 @@
 require('dotenv').config();
-let vtuPrefix = process.env['VTUPrefix']
-let vtuUrl = process.env['VTURoute'];
-let requeryUrl = process.env['VTURequeryRoute'];
-let username = process.env['VTUUsername'];
-let password = process.env['VTUPassword'];
+let VTUPrefix = process.env['VTUPrefix']
+let VTUUrl = process.env['VTURoute'];
+let RequeryUrl = process.env['VTURequeryRoute'];
+let Username = process.env['VTUUsername'];
+let Password = process.env['VTUPassword'];
 module.exports = {
-    vtuPrefix, vtuUrl, requeryUrl, username, password
-}
+    VTUPrefix, VTUUrl, RequeryUrl, Username, Password
+};

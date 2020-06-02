@@ -22,8 +22,9 @@ class AuthenticationSystem extends BaseProcessor{
         }
         return result;
     }
-    async IsAuthenticated(data){
+    async IsAuthenticated(data, institutionID){
         let result = true;
+        //Set InstitutionID
         return result;
     }
     static async GenerateToken(req, res){
@@ -56,7 +57,8 @@ class AuthenticationSystem extends BaseProcessor{
             Result: {},
             Code: '',
             Message: '',
-            Error: null
+            Error: null,
+            InstitutionID: 0
         };
         let result = {};
         try {
@@ -77,7 +79,7 @@ class AuthenticationSystem extends BaseProcessor{
                 let token = request.split(' ')[1];
                 let decode = jwt.verify(token, 'secret');
                 let data = decode.data;
-                if (this.IsAuthenticated(data) && this.IsInRole(data)) {
+                if (this.IsAuthenticated(data, response.InstitutionID) && this.IsInRole(data)) {
                     response.Result = result;
                     response.Code = Response.MessageResponse_SUCCESS.Code;
                     response.Message = Response.MessageResponse_SUCCESS.Message;

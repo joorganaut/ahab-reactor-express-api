@@ -33,6 +33,8 @@ const Customer = sequelize.define('Customers', {
     BVN: { type:  DataTypes.STRING},
     UserID: { type:  DataTypes.BIGINT},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},

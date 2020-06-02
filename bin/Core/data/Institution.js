@@ -1,6 +1,6 @@
 //const connection = require('./config/connection.pg.heroku.json');
 const { Op, DataTypes } = require('sequelize');
-const BusinessObject = require('../BusinessObject')
+const BusinessObject = require('../BusinessObject');
 
 
 /*public virtual string Code { get; set; }
@@ -31,12 +31,12 @@ const Institution = sequelize.define('Institutions', {
     ContactEmail: { type:  DataTypes.STRING},
     ContactPhonenumber: { type:  DataTypes.STRING},
     ContactAddress: { type:  DataTypes.STRING},
-    DecryptionKey: { type:  DataTypes.STRING},
+    DecryptionKey: { type:  DataTypes.TEXT},
     PassPhrase: { type:  DataTypes.STRING},
-    Password: {type: DataTypes.BOOLEAN},
-    EncryptionKey: { type:  DataTypes.BOOLEAN},
-    LocalConnectionString: { type:  DataTypes.DATE},
-    RemoteConnectionString: { type:  DataTypes.INTEGER},
+    Password: {type: DataTypes.STRING},
+    EncryptionKey: { type:  DataTypes.TEXT},
+    LocalConnectionString: { type:  DataTypes.STRING},
+    RemoteConnectionString: { type:  DataTypes.STRING},
     Industry: { type:  DataTypes.STRING},
     ShortName: { type:  DataTypes.STRING},
     ApprovedIP:{type: DataTypes.STRING},
@@ -50,4 +50,4 @@ const Institution = sequelize.define('Institutions', {
     Name: { type:  DataTypes.STRING},
 }, 
 {tableName : 'Institutions'},DISABLE_SEQUELIZE_DEFAULTS);
-module.exports = {Institution}
+module.exports = {Institution};

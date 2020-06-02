@@ -45,6 +45,8 @@ const Message = sequelize.define('Messages', {
     MessageStatus: { type:  DataTypes.INTEGER},
     ErrorMessage: { type:  DataTypes.STRING},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},

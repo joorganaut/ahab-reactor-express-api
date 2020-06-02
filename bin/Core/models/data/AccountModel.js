@@ -12,6 +12,8 @@ public  string AccountNumber { get; set; }
         public  decimal DepositInterestRate { get; set; }
         public AccountStatus Status { get; set; }
         public  int DepositTenor { get; set; }
+        CurrencyID: {type: DataTypes.BIGINT},
+    Currency: {type: DataTypes.STRING},
 */
 const {BaseModel} = require('../../contracts/BaseModel')
 class AccountModel extends BaseModel{
@@ -30,6 +32,8 @@ class AccountModel extends BaseModel{
         this.DepositInterestRate = props === undefined ? 0 :  props.DepositInterestRate;
         this.Status = props === undefined ? '' :  props.Status;
         this.DepositTenor = props === undefined ? 0 :  props.DepositTenor;
+        this.CurrencyID = props === undefined ? 0 : props.CurrencyID;
+        this.Currency = props === undefined ? 'NGN' : props.Currency;
     }
 }
 module.exports = {AccountModel}

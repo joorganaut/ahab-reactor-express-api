@@ -32,12 +32,15 @@ const VTULog = sequelize.define('VTULogs', {
     Amount: { type:  DataTypes.DECIMAL},
     Status: { type:  DataTypes.STRING},
     RequestID: { type:  DataTypes.STRING},
+    Ref: {type: DataTypes.STRING},
     IsSuccessful: {type: DataTypes.BOOLEAN},
     StatusMessage: { type:  DataTypes.STRING},
     ResponseMessage: { type:  DataTypes.STRING},
     ResponseCode: { type:  DataTypes.INTEGER},
     Source: { type:  DataTypes.INTEGER},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},
@@ -47,4 +50,4 @@ const VTULog = sequelize.define('VTULogs', {
     Name: { type:  DataTypes.STRING},
 }, 
 {tableName : 'VTULogs'},DISABLE_SEQUELIZE_DEFAULTS);
-module.exports = {VTULog}
+module.exports = {VTULog};

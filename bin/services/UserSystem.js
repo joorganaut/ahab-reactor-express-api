@@ -1,4 +1,5 @@
 const {User} = require('../Core/data/User');
+const {BusinessImage} = require('../Core/data/BusinessImage');
 const {Institution} = require('../Core/data/Institution');
 const {Customer} = require('../Core/data/Customer');
 const {Address} = require('../Core/data/Address');
@@ -7,6 +8,7 @@ const {InstitutionModel} = require('../Core/models/data/InstitutionModel');
 const {AccountModel} = require('../Core/models/data/AccountModel');
 const {CustomerModel} = require('../Core/models/data/CustomerModel');
 const {UserModel} = require('../Core/models/data/UserModel');
+const {BusinessImageModel} = require('../Core/models/data/BusinessImageModel');
 const {AddressModel} = require('../Core/models/data/AddressModel');
 const BaseSystem = require('./BaseSystem');
 const saltedMd5 = require('salted-md5');
@@ -14,6 +16,7 @@ const {DBTransactionParameter} = require('../Core/contracts/DBTransactionParamet
 const {InstitutionSystem} = require('./InstitutionSystem');
 const {CustomerSystem} = require('./CustomerSystem');
 const {AccountSystem} = require('./AccountSystem');
+const {SecuritySystem} = require('./SecuritySystem');
 const LoginRequest = require('../Core/models/mobile/LoginRequest').LoginRequest;
 const LoginResponse = require('../Core/models/mobile/LoginResponse').LoginResponse;
 const ChangePasswordRequest = require('../Core/models/mobile/ChangePasswordRequest').ChangePasswordRequest;
@@ -31,7 +34,7 @@ class UserSystem extends BaseSystem{
     constructor(response, props){
         super(props);
         this.response = response;
-        this.InstitutionSystem = new InstitutionSystem(response, props);
+        //this.InstitutionSystem = new InstitutionSystem(response, props);
         this.CustomerSystem = new CustomerSystem(response, props);
         this.AccountSystem = new AccountSystem(response, props);
     }
@@ -202,12 +205,12 @@ class UserSystem extends BaseSystem{
     async ResetPin(request, response){
         try{
             let user = await this.RetrieveByParameter(User, {Username : request.LoginUsername});
-            user = new UserModel(
-            {
-                Username : "sazeespectra@gmail.com",
-                Email : "sazeespectra@gmail.com",
-                FullName : "Test User",
-            });
+            // user = new UserModel(
+            // {
+            //     Username : "sazeespectra@gmail.com",
+            //     Email : "sazeespectra@gmail.com",
+            //     FullName : "Test User",
+            // });
             if (user !== null)
             {
                 //generate temp password
@@ -239,12 +242,12 @@ class UserSystem extends BaseSystem{
     async ResetPassword(request, response){
         try{
                 let user = await this.RetrieveByParameter(User, {Username : request.LoginUsername});
-                user = new UserModel(
-                {
-                    Username : "sazeespectra@gmail.com",
-                    Email : "sazeespectra@gmail.com",
-                    FullName : "Test User",
-                });
+                // user = new UserModel(
+                // {
+                //     Username : "sazeespectra@gmail.com",
+                //     Email : "sazeespectra@gmail.com",
+                //     FullName : "Test User",
+                // });
                 if (user !== null)
                 {
                     //generate temp password
@@ -273,17 +276,20 @@ class UserSystem extends BaseSystem{
         }
         this.response.res.send(response.ToString());
     }
-
-    async CreateIndividualDetails(request, institution)
+    async CreateIndividualDetails(request, institution, transaction)
     {
         let result = null;
-        let t = await this.Sequelize.transaction();
+        let t = BaseSystem.IsNullOrUndefined(transaction)? await this.Sequelize.transaction() : transaction;
         let VTUProducts = {ID : 1, IsGLProduct : false};//Remember to retrieve actual product
         try
         {
-            
             //Create Institution User
             let user = new UserModel(request.UserModel);
+            let usr = await this.RetrieveByParameter(User, {Username : user.Email});
+            if(!BaseSystem.IsNullOrUndefined(usr)){
+                this.Error = "User with same email exists";
+                return null;
+            }
             user.Password = saltedMd5(request.UserModel.Password);
             user.TransactionPin = saltedMd5(request.UserModel.TransactionPin);
             user.DateCreated = BaseSystem.GetDate(true);
@@ -296,14 +302,17 @@ class UserSystem extends BaseSystem{
             customer.DateLastModified = BaseSystem.GetDate(true);
             customer.InstitutionID = institution.ID;
             customer.InstitutionCode = institution.Code;
-
+            
             //Validate bvn
             let address = new AddressModel(request.CustomerModel.Address);
-            let para = [];
-            let executingObject = {};
-            
-            let theUser = await this.Save(User, user, { transaction: t}).then(async res=>{
+            await this.Save(User, user, { transaction: t}).then(async res=>{
                 customer.UserID = res.ID;
+                let businessImage = new BusinessImageModel({
+                    ImageString : user.ProfileImage,
+                    ImageEntityID : res.ID,
+                    ImageEntity : 'User'
+                });
+                await this.Save(BusinessImage, businessImage, {transaction : t});
                 await this.Save(Customer, customer, { transaction: t}).then(async cus=>{
                     address.EntityID = cus.ID;
                     address.EntityName = "Customer";
@@ -316,6 +325,7 @@ class UserSystem extends BaseSystem{
                         DateLastModified : BaseSystem.GetDate(true),
                         CustomerID : cus.ID,
                         IsGLProduct : VTUProducts.IsGLProduct,
+                        CurrencyID : 1,
                         ProductID : VTUProducts.ID});
                     await this.Save(Account, account, { transaction: t}).then(async acc=>{
                         await this.AccountSystem.GenerateAccountNumber(VTUProducts, acc.ID).then(accountNumber=>{
@@ -324,8 +334,15 @@ class UserSystem extends BaseSystem{
                         acc.Name = institution.Code + "_" + acc.ID + "_VTU Wallet";
                         await this.Update(acc, { transaction: t});
                     });
-                });                
-                (await t).commit();
+                    let url = this.response.req.headers.host;
+                    var cipher = await SecuritySystem.Encrypt(`${res.ID}`, institution);
+                    let baseUrl = `${url}/api/MobileMiddleware/Registration/ActivateAccount?request=${cipher}&id=${institution.ID}`;
+                    res.ActivationLink = baseUrl;
+                    await this.Update(res, { transaction: t});
+                });  
+                if(BaseSystem.IsNullOrUndefined(transaction)){
+                    (await t).commit();
+                }
                 if (!BaseSystem.IsNullOrUndefined(res))
                 {
                     result = res;
@@ -334,99 +351,15 @@ class UserSystem extends BaseSystem{
                 {
                     this.Error = "Unable to create institution/user/customer/account details";
                 }
-                return result;
-            });
-            
-            
-            
-            /*
-            para.push(new DBTransactionParameter(
-            {
-                DBAction : this.DBAction.Save.name,
-                Action : (a, callback) => { callback(a); },
-                DBObject : user,
-                DBObjectType : User
-            }));
-            para.push(new DBTransactionParameter(
-            {
-                DBAction : this.DBAction.Save.name,
-                Action : (a, callback) => {
-                    executingObject = a;
-                    customer.UserID = executingObject.ID;
-                    callback(a);
-                },
-                DBObject : customer,
-                DBObjectType : Customer
-            }));
-            para.push(new DBTransactionParameter(
-            {
-                DBAction : this.DBAction.Save.name,
-                Action : (a, callback) =>
-                {
-                    executingObject = a;
-                    address.EntityID = executingObject.ID;
-                    address.EntityName = "Customer";
-                    address.DateCreated = BaseSystem.GetDate(true);
-                    address.DateLastModified = BaseSystem.GetDate(true);
-                    callback(a);
-                },
-                DBObject : address,
-                DBObjectType : Address
-            }));
-            let account = new AccountModel({
-            //account.Name = institution.Code + "_" + account.ID + "_VTU Wallet";
-            DateCreated : BaseSystem.GetDate(true),
-            DateLastModified : BaseSystem.GetDate(true),
-            CustomerID : executingObject.ID,
-            ProductID : VTUProducts.ID});
-            para.push(new DBTransactionParameter(
-            {
-                DBAction : this.DBAction.Save.name,
-                Action : (a, callback) =>
-                {
-                    callback(a);
-                },
-                DBObject : account,
-                DBObjectType : Account
-            }));
-            para.push(new DBTransactionParameter(
-            {
-                DBAction : this.DBAction.Update.name,
-                Action : (a, callback) =>
-                {
-                    executingObject = a;
-                    this.AccountSystem.GenerateAccountNumber(VTUProducts, executingObject.ID).then(res=>{
-                        executingObject.AccountNumber = res;
-                    });
-                    executingObject.Name = institution.InstitutionCode + "_" + executingObject.ID + "_VTU Wallet";
-                    callback(a);
-                },
-                DBObject : executingObject,
-                DBObjectType : Account
-            }));
-            para.push(new DBTransactionParameter(
-            {
-                DBAction : this.DBAction.Update.name,
-                Action : (a, callback) => {
-                    //Generate activation url
-                    let url = BaseSystem.Empty();
-                    var cipher = saltedMd5(`${theUser.ID}`);
-                    let baseUrl = `/MobileMiddleware/Registration/ActivateAccount?request={cipher}&id=${institution.ID}`;
-                    theUser.ActivationLink = baseUrl;
-                    thisUser.where = thisUser.ID;
-                    callback(a);
-                },
-                DBObject : theUser,
-                DBObjectType : User,
-            }));*/
-            
+                //return result;
+            });            
         }
         catch (e)
         {
             this.Error = e;
             (await t).rollback();
         }
-        //return result;
+        return result;
     }
 
     async RegisterIndividual(request, response){
@@ -435,8 +368,8 @@ class UserSystem extends BaseSystem{
                 //Validate institution
                 let code = request.InstitutionCode;
                 let password = request.InstitutionPassword;
-                let institution = await this.InstitutionSystem.ValidateInstitution(code, password);
-                institution = {ID : 1, Code : '1223334444', Name : 'Test Institution', ShortName : 'TI'};
+                let institution = await new InstitutionSystem(this.response).ValidateInstitution(code, password);
+                //institution = {ID : 1, Code : '1223334444', Name : 'Test Institution', ShortName : 'TI'};
                 if (institution !== null)
                 {
                     //Create Institution details
@@ -475,7 +408,24 @@ class UserSystem extends BaseSystem{
         this.response.res.send(response.ToString());
     }
     async ActivateAccount(){
-        this.response.res.redirect(200, 'AccountActivated');
+        let query = this.response.req.query;
+        let institution = await this.RetrieveByParameter(Institution, {ID : query.id});
+        if(!BaseSystem.IsNullOrUndefined(institution)){
+            let userID = await SecuritySystem.Decrypt(query.request, institution);
+            if(!BaseSystem.IsNullOrWhiteSpace(userID)){
+                let user = await this.Get(User, userID);
+                if(!BaseSystem.IsNullOrUndefined(user)){
+                    this.response.res.render('Activation', {Name : user.FirstName+' '+user.LastName});
+                }else{
+                    this.response.res.render('ActivationError', {Error : 'Unable to determine your registration'});
+                }
+            }else{
+                this.response.res.render('ActivationError', {Error : 'Unable to decrypt url'});
+            }
+        }
+        else{
+            this.response.res.render('ActivationError', {Error : 'Unable to determine your institution'});
+        }
     }
     
 }

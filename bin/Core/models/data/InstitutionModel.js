@@ -20,7 +20,7 @@
         public string Error { get; set; }
         public string Name { get; set; }
 */
-const {BaseModel} = require('../../contracts/BaseModel')
+const {BaseModel} = require('../../contracts/BaseModel');
 class InstitutionModel extends BaseModel{
     constructor(props){
         super(props);
@@ -38,4 +38,4 @@ class InstitutionModel extends BaseModel{
         this.Name = props === undefined ? '' :  props.Name;
     }
 }
-module.exports = {InstitutionModel}
+module.exports = {InstitutionModel};

@@ -27,6 +27,10 @@ class BaseSystem extends BaseProcessor{
         let obj = await this.T.FindOne(model, params);
         return obj;
     }
+    async Get(model, id){
+        let obj = await this.T.Get(model, id);
+        return obj;
+    }
     async Update(model, transaction){
         let obj = await this.T.Update(model, transaction);
         return obj;

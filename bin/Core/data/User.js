@@ -38,8 +38,10 @@ const User = sequelize.define('Users', {
     LastLoginDate: { type:  DataTypes.DATE},
     NumberOfFailedAttempts: { type:  DataTypes.INTEGER},
     Email: { type:  DataTypes.STRING},
-    ActivationLink: { type:  DataTypes.STRING},
+    ActivationLink: { type:  DataTypes.TEXT},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},
@@ -49,4 +51,4 @@ const User = sequelize.define('Users', {
     Name: { type:  DataTypes.STRING},
 }, 
 {tableName : 'Users'},DISABLE_SEQUELIZE_DEFAULTS);
-module.exports = {User}
+module.exports = {User};

@@ -33,6 +33,8 @@ const AuditTrail = sequelize.define('AuditTrails', {
     RequestTime: { type:  DataTypes.DATE},
     ResponseTime: { type:  DataTypes.DATE},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},

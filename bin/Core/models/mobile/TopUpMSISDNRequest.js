@@ -11,6 +11,7 @@ class TopUpMSISDNRequest extends BaseRequest{
         this.amount =  props === undefined ? 0 :  props.amount;
         this.msisdn =  props === undefined ? '' :  props.msisdn;
         this.network =  props === undefined ? '' :  props.network;
+        this.source = props === undefined ? '' : props.source;
     }
 }
 module.exports = {TopUpMSISDNRequest};

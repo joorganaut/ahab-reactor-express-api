@@ -31,6 +31,8 @@ const Transaction = sequelize.define('Transactions', {
     GuidRef: { type:  DataTypes.STRING},
     Type: { type:  DataTypes.INTEGER},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},

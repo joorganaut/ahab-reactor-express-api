@@ -22,7 +22,7 @@ const UFunction = sequelize.define('UFunctions', {
     CreatedBy: { type:  DataTypes.STRING},
     LastModifiedBy: { type:  DataTypes.STRING},
     InstitutionCode: { type:  DataTypes.STRING},
-    InstitutionID: { type:  DataTypes.INTEGER},
+    InstitutionID: { type:  DataTypes.BIGINT},
     Name: { type:  DataTypes.STRING},
 },
 {tableName : 'UFunctions'},

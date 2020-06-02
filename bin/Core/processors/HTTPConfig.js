@@ -8,10 +8,10 @@ class HTTPConfig{
         this.ApiConfigName =  props === undefined ? '' :  props.ApiConfigName;
         this.Headers =   props === undefined ? [] : props.Headers;
         this.Parameters =   props === undefined ? '' : props.Parameters;
-        this.Url = this.IP + this.Route;
+        this.Url = props === undefined ? '' : props.IP + props.Route;
     }
 }
-module.exports = {HTTPConfig}
+module.exports = {HTTPConfig};
 
 /*
 public string IP { get; set; }

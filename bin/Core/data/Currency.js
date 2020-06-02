@@ -1,6 +1,6 @@
 //const connection = require('./config/connection.pg.heroku.json');
 const { Op, DataTypes } = require('sequelize');
-const BusinessObject = require('../BusinessObject')
+const BusinessObject = require('../BusinessObject');
 
 
 /*public virtual string AccountNumber { get; set; }
@@ -25,23 +25,12 @@ const DISABLE_SEQUELIZE_DEFAULTS = {
     ssl : false,
 };
 const sequelize  = BusinessObject.sequelize;
-const Account = sequelize.define('Accounts', {
+const Currency = sequelize.define('Currencies', {
     ID: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
-    AccountNumber: { type:  DataTypes.STRING},
-    AccountBalance: { type:  DataTypes.DECIMAL},
-    ProductID: { type:  DataTypes.BIGINT},
-    CustomerID: { type:  DataTypes.BIGINT},
-    IsGL: { type:  DataTypes.BOOLEAN},
-    MinimumBalance: { type:  DataTypes.DECIMAL},
-    HasOverDraft: {type: DataTypes.BOOLEAN},
-    OverDraftLimit: { type:  DataTypes.DECIMAL},
-    OverDraftInterestRate: { type:  DataTypes.DECIMAL},
-    OverDraftTenor: { type:  DataTypes.INTEGER},
-    DepositInterestRate: { type:  DataTypes.DECIMAL},
-    DepositTenor: { type:  DataTypes.INTEGER},
-    Status: { type:  DataTypes.INTEGER},
-    CurrencyID: {type: DataTypes.BIGINT},
-    Currency: {type: DataTypes.STRING},
+    Code: { type:  DataTypes.STRING},
+    HomeCurrencyID: { type:  DataTypes.BIGINT},
+    ExchangeRate: { type:  DataTypes.DECIMAL},
+    Description: {type: DataTypes.STRING},
     //Parent properties
     InstitutionID: {type: DataTypes.BIGINT},
     InstitutionCode: {type: DataTypes.STRING},
@@ -53,5 +42,5 @@ const Account = sequelize.define('Accounts', {
     LastModifiedBy: { type:  DataTypes.STRING},
     Name: { type:  DataTypes.STRING},
 }, 
-{tableName : 'Accounts'},DISABLE_SEQUELIZE_DEFAULTS);
-module.exports = {Account}
+{tableName : 'Currencies'}, DISABLE_SEQUELIZE_DEFAULTS);
+module.exports = {Currency};

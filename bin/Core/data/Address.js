@@ -27,6 +27,8 @@ const Address = sequelize.define('Addresses', {
     State: { type:  DataTypes.STRING},
     Country: { type:  DataTypes.STRING},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},

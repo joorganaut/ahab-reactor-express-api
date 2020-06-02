@@ -10,26 +10,26 @@ const {VTUProcessor} = require('./VTUProcessor');
 const T = require('../DAO/BusinessObjectDAO');
 class PinProcessor extends BaseProcessor{
     constructor(props){
-        super(props)
+        super(props);
         this.props = props;
     }
-    Execute=async(param)=>{
+    async Execute(param){
         let response = new ProcessPinResponse({Error : ''});
         let request = new ProcessPinRequest(param);
         try
             {
                 //validate request
-                if (this.IsNullOrWhiteSpace(request.MSISDN))
+                if (BaseProcessor.IsNullOrWhiteSpace(request.MSISDN))
                 {
                     response.ResponseCode = Responses.MessageResponse_SYSTEM_MALFUNCTION_INVALID_FIELDS.Code;
                     response.ResponseMessage = Responses.MessageResponse_SYSTEM_MALFUNCTION_INVALID_FIELDS.Message + ": Invalid Phone Details "+request.MSISDN;
                     return response;
                 } 
                 //validate pin
-                if (this.IsNullOrWhiteSpace(request.Pin))
+                if (BaseProcessor.IsNullOrWhiteSpace(request.Pin))
                 {
-                    response.ResponseCode = MessageResponses.SYSTEM_MALFUNCTION_INVALID_FIELDS.Code;
-                    response.ResponseMessage = MessageResponses.SYSTEM_MALFUNCTION_INVALID_FIELDS.Message + " Invalid Pin";
+                    response.ResponseCode = Responses.MessageResponse_SYSTEM_MALFUNCTION_INVALID_FIELDS.Code;
+                    response.ResponseMessage = Responses.MessageResponse_SYSTEM_MALFUNCTION_INVALID_FIELDS.Message + " Invalid Pin";
                     return response;
                 }
 
@@ -60,7 +60,7 @@ class PinProcessor extends BaseProcessor{
                     vtu2Pin.IsUsed = true;
                     vtu2Pin.IsSuccessful = true;
                     vtu2Pin.VTUResponse = v_response.message;
-                    await T.Update(vtu2Pin)
+                    await T.Update(vtu2Pin);
                     response.ResponseCode = Responses.MessageResponse_SUCCESS.Code;
                     response.ResponseMessage = `${Responses.MessageResponse_SUCCESS.Message}`;
                 }

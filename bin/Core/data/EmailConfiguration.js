@@ -25,6 +25,8 @@ const EmailConfiguration = sequelize.define('EmailConfigurations', {
     SenderEmail: { type:  DataTypes.STRING},
     DefaultEmails: { type:  DataTypes.STRING},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},

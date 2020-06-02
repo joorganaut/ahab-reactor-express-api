@@ -40,7 +40,11 @@ const Product = sequelize.define('Products', {
     CustomerPercentage: { type:  DataTypes.DECIMAL},
     IncomeAccount: { type:  DataTypes.BIGINT},
     ExpenseAccount: { type:  DataTypes.BIGINT},
+    CurrencyID: {type: DataTypes.BIGINT},
+    Currency: {type: DataTypes.STRING},
     //Parent properties
+    InstitutionID: {type: DataTypes.BIGINT},
+    InstitutionCode: {type: DataTypes.STRING},
     IsEnabled: { type:  DataTypes.BOOLEAN},
     DateCreated: { type:  DataTypes.DATE},
     DateLastModified: { type:  DataTypes.DATE},

@@ -5,7 +5,7 @@ class ProcessVTURequest extends BaseRequest{
         this.amount =   props === undefined ? 0 : props.amount;
         this.msisdn =   props === undefined ? '' : props.msisdn;
         this.network =   props === undefined ? '' : props.network;
-        this.Source =   props === undefined ? '' : props.Source;
+        this.source =   props === undefined ? '' : props.source;
     }
 }
 module.exports = {ProcessVTURequest};

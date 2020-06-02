@@ -1,3 +1,4 @@
+var os = require('os');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -22,8 +23,9 @@ var swaggerDefinition = {
     version: '2.0.0',
     description: 'Documentation for the Ahab Reactor',
   },
-  host: 'localhost:5250',
-  // host: 'https://ahab-reactor.herokuapp.com',
+  host: os.hostname(),
+  // host: 'localhost:5250',
+  // host: 'ahab-reactor.herokuapp.com',
   basePath: '/',
 };
 

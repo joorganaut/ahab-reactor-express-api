@@ -30,7 +30,7 @@ class AccountSystem extends BaseSystem{
     }
     async OpenAccount(request, response){    
     try{
-            if (this.BaseProcessor.IsNullOrWhiteSpace(request.Name))
+            if (BaseSystem.IsNullOrWhiteSpace(request.Name))
             {
                 response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION_INVALID_FIELDS.Code;
                 response.Message = `${this.ResponsesResponses.MessageResponse_SYSTEM_MALFUNCTION.Message}: Account Name cannot be Blank`;
@@ -73,11 +73,11 @@ class AccountSystem extends BaseSystem{
                 response.Message = `${this.Responses.MessageResponse_DUPLICATE_TRANSMISSION.Message}: Account with same Product exists for Customer`;
                 return response;
             }
-            request.DateCreated = DateTime.Now;
-            request.DateLastModified = DateTime.Now;
+            request.DateCreated = this.GetDate(true);
+            request.DateLastModified = this.GetDate(true);
             request.InstitutionID = Institution.ID;
             let para = [];
-            let account = {};
+            let account = {}; //Remember to refactor 
             para.push(new DBTransactionParameter({
                 DBAction : this.DBAction.Save.name,
                 Action : () => { },
