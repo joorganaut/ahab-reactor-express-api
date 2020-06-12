@@ -11,8 +11,8 @@ class USSDProcessorServer {
         this.next = next;
     }
     async ProcessRequest() {
-        let request = new USSDRequest(this.req.body);
-        console.log(JSON.stringify(this.req.body));
+        let request = new USSDRequest(JSON.parse(this.req.body));
+        console.log(JSON.stringify(request));
         let response = new USSDResponse({Error : ''});
         try {
             if (request.content === null || request.content === undefined || request.content === '' || request.content === "*372*2#") {
