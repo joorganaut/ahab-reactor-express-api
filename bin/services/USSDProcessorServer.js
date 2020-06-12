@@ -14,7 +14,7 @@ class USSDProcessorServer {
         
         let response = new USSDResponse({Error : ''});
         try {
-            let request = JSON.parse(this.req.body);//new USSDRequest(this.req.body);
+            let request = new USSDRequest(this.req.body);
             console.log(request);
             if (request.content === null || request.content === undefined || request.content === '' || request.content === "*372*2#") {
                 response.content = "Invalid PIN. Please dial *372*2*PIN# to recharge";
@@ -47,6 +47,7 @@ class USSDProcessorServer {
             response.Code = response.content = Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
             response.Message = `${Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e}: ${this.req.body}`;
         }
+        console.log(response.ToString());
         this.res.send(response.ToString());
     }
     async ExecuteUSSDAction(request){
