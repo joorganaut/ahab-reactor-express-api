@@ -11,11 +11,11 @@ class USSDProcessorServer {
         this.next = next;
     }
     async ProcessRequest() {
-        
         let response = new USSDResponse({Error : ''});
         try {
-            let request = new USSDRequest(this.req.body);
-            console.log(JSON.stringify(this.req.body));
+            let body = Object.keys(this.req.body)[0];
+            let request = new USSDRequest(JSON.parse(body));
+            console.log(JSON.parse(body));
             if (request.content === null || request.content === undefined || request.content === '' || request.content === "*372*2#") {
                 response.content = "Invalid PIN. Please dial *372*2*PIN# to recharge";
                 response.msisdn = request.msisdn;
