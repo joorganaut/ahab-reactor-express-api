@@ -17,7 +17,7 @@ class USSDProcessorServer {
         try {
             
             if (request.content === null || request.content === undefined || request.content === '' || request.content === "*372*2#") {
-                response.content = "Invalid PIN. Please dial *372*2*PIN# to recharge";
+                response.content = this.req.body;//"Invalid PIN. Please dial *372*2*PIN# to recharge";
                 response.msisdn = request.msisdn;
                 response.command = USSDCommand.End.name;
                 response.src = request.src;
@@ -53,7 +53,7 @@ class USSDProcessorServer {
         let result = new USSDResponse({Error : ''});
         let pin = request.content.split('*');
         if (pin.length < 3) {
-            result.content = "Invalid PIN. Please dial *372*2*PIN# to recharge";
+            result.content = JSON.stringify(request);//"Invalid PIN. Please dial *372*2*PIN# to recharge";
             result.Code = "EP";
             result.Message = "Empty Pin";
             return result;
