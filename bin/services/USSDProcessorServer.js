@@ -25,7 +25,7 @@ class USSDProcessorServer {
             else{
                 var responseString = await this.ExecuteUSSDAction(request);
                 if (responseString.Code == "00") {
-                    response.Content =  "Your airtime recharge was successful, Enjoy unlimited airtime, just dial *372*2#";
+                    response.Content =  responseString.content;//"Your airtime recharge was successful, Enjoy unlimited airtime, just dial *372*2#";
                 } else if (responseString.Code == "94") {
                     response.Content =  "This recharge pin has been used before, Enjoy unlimited airtime, just dial *372*2#";
                 } else if (responseString.Code == "EP") {
@@ -35,7 +35,7 @@ class USSDProcessorServer {
                     response.Content =  `Your airtime recharge failed ${response.Message}, Enjoy unlimited airtime, just dial *372*2#`;
                 }
                 response.msisdn = request.msisdn;
-                response.command = USSDCommand.End.name;
+                response.command = USSDCommand.Continue.name;
                 response.src = request.src;
                 response.Code = responseString.Code;
                 response.Message = responseString.Message;
@@ -54,15 +54,23 @@ class USSDProcessorServer {
             result.content = "Invalid PIN. Please dial *372*2*PIN# to recharge";
             result.Code = "EP";
             result.Message = "Empty Pin";
+            return result;
         } else {
             var processPinRequest = new ProcessPinRequest({
                 MSISDN : request.msisdn,
                 Pin : pin[3].replace("#", ""),
                 Network : request.src
             });
+            //lets retrieve a ussd menu
+            if(processPinRequest.Pin.length < 16 && processPinRequest.Pin === '75'){
+                result.content = "Welcome to USSD Sublet\n please enter your option\n 1.) Register Card\n2.) Get Virtual Card\n";
+                result.Code = "00";
+                result.Message = "Successful";
+                return result;
+            }
             var p_response = await new PinProcessor().Execute(processPinRequest);
             result.Code = p_response.ResponseCode;
-            result.Message = p_response.ResponseMessage;
+            result.Message = p_response.Code == '00'? "Your airtime recharge was successful, Enjoy unlimited airtime, just dial *372*2#": p_response.ResponseMessage;
         }
         return result;
     }

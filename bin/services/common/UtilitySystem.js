@@ -41,7 +41,7 @@ class UtilitySystem extends BaseProcessor {
      * Return true if specified code (with check digit) is valid.
      */
     static luhn_validate(fullcode) {
-        return GenerateLuhnNumber(fullcode) == 0;
+        return this.GenerateLuhnNumber(fullcode) == 0;
     }
 
     static CleanStringOfNonDigits(s)
