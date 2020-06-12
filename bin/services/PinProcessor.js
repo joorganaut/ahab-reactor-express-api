@@ -33,7 +33,7 @@ class PinProcessor extends BaseProcessor{
                     return response;
                 }
 
-                var query = {Pin : request.Pin, Network : request.Network}
+                var query = {Pin : request.Pin, Network : request.Network};
                 var vtu2Pin = await T.FindOne(VTUPin, query);
                 if(this.IsNullOrUndefined(vtu2Pin)){
                     response.ResponseCode = Responses.MessageResponse_CARD_NUMBER_INVALID_NO_RECORD.Code;

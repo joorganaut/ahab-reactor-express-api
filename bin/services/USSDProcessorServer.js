@@ -15,7 +15,7 @@ class USSDProcessorServer {
         let response = new USSDResponse({Error : ''});
         try {
             let request = new USSDRequest(this.req.body);
-            console.log(request);
+            console.log(JSON.stringify(this.req.body));
             if (request.content === null || request.content === undefined || request.content === '' || request.content === "*372*2#") {
                 response.content = "Invalid PIN. Please dial *372*2*PIN# to recharge";
                 response.msisdn = request.msisdn;
