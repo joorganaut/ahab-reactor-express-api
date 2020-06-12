@@ -11,11 +11,11 @@ class USSDProcessorServer {
         this.next = next;
     }
     async ProcessRequest() {
-        let request = new USSDRequest(this.req.body);
-        console.log(this.req.body);
+        
         let response = new USSDResponse({Error : ''});
         try {
-            
+            let request = JSON.parse(this.req.body);//new USSDRequest(this.req.body);
+            console.log(request);
             if (request.content === null || request.content === undefined || request.content === '' || request.content === "*372*2#") {
                 response.content = "Invalid PIN. Please dial *372*2*PIN# to recharge";
                 response.msisdn = request.msisdn;
@@ -27,14 +27,14 @@ class USSDProcessorServer {
             else{
                 var responseString = await this.ExecuteUSSDAction(request);
                 if (responseString.Code == "00") {
-                    response.Content =  responseString.content;//"Your airtime recharge was successful, Enjoy unlimited airtime, just dial *372*2#";
+                    response.content =  responseString.content;//"Your airtime recharge was successful, Enjoy unlimited airtime, just dial *372*2#";
                 } else if (responseString.Code == "94") {
-                    response.Content =  "This recharge pin has been used before, Enjoy unlimited airtime, just dial *372*2#";
+                    response.content =  "This recharge pin has been used before, Enjoy unlimited airtime, just dial *372*2#";
                 } else if (responseString.Code == "EP") {
                     response.Code = responseString.Message;
                     response.Message = responseString.Code;
                 } else {
-                    response.Content =  `Your airtime recharge failed ${response.Message}, Enjoy unlimited airtime, just dial *372*2#`;
+                    response.content =  `Your airtime recharge failed ${response.Message}, Enjoy unlimited airtime, just dial *372*2#`;
                 }
                 response.msisdn = request.msisdn;
                 response.command = USSDCommand.Continue.name;
@@ -45,7 +45,7 @@ class USSDProcessorServer {
             
         } catch (e) {
             response.Code = response.content = Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
-            response.Message = `${Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e}`;
+            response.Message = `${Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e}: ${this.req.body}`;
         }
         this.res.send(response.ToString());
     }
