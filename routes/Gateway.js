@@ -1,7 +1,9 @@
 var express = require('express');
+//const session = require('express-session');
 var router = express.Router();
 const {USSDProcessorServer} = require('../bin/services/USSDProcessorServer');
-
+// var app = express();
+// app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 /**
  * @swagger
  * definitions:

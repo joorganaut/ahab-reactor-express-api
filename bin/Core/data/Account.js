@@ -1,6 +1,6 @@
 //const connection = require('./config/connection.pg.heroku.json');
 const { Op, DataTypes } = require('sequelize');
-const BusinessObject = require('../BusinessObject')
+const BusinessObject = require('../BusinessObject');
 
 
 /*public virtual string AccountNumber { get; set; }
@@ -54,4 +54,4 @@ const Account = sequelize.define('Accounts', {
     Name: { type:  DataTypes.STRING},
 }, 
 {tableName : 'Accounts'},DISABLE_SEQUELIZE_DEFAULTS);
-module.exports = {Account}
+module.exports = {Account};

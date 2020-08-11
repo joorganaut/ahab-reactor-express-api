@@ -14,7 +14,7 @@ module.exports = {
     PNC : {
         value : 4
     }
-}
+};
 /* Open = 0,
         Closed = 1,
         Dormant = 2,

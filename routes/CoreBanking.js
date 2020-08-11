@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var {AuthenticationSystem} = require('../bin/services/AuthenticationSystem');
 var {AccountSystem} = require('../bin/services/AccountSystem');
+var {ProductSystem} = require('../bin/services/ProductSystem');
 /**
  * @swagger
  * definitions:
@@ -62,6 +63,21 @@ var {AccountSystem} = require('../bin/services/AccountSystem');
 router.post('/Account/AddCustomerAccount', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["CoreBanking"], async (response)=>{
         await new AccountSystem(response).OpenAccountAsync();
+    });
+});
+router.post('/Product/AddProduct', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["CoreBanking"], async (response)=>{
+        await new ProductSystem(response).AddProductAsync();
+    });
+});
+router.get('/Product/ViewAllProduct', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["CoreBanking"], async (response)=>{
+        await new ProductSystem(response).ViewAllProductsAsync();
+    });
+});
+router.put('/Product/UpdateProduct', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["CoreBanking"], async (response)=>{
+        await new ProductSystem(response).UpdateProductAsync();
     });
 });
 module.exports = router;

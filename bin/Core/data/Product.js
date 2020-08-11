@@ -1,6 +1,6 @@
 //const connection = require('./config/connection.pg.heroku.json');
 const { Op, DataTypes } = require('sequelize');
-const BusinessObject = require('../BusinessObject')
+const BusinessObject = require('../BusinessObject');
 
 
 /*public virtual string Prefix { get; set; }

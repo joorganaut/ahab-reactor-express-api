@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 require('dotenv').config({path: __dirname + '/.env'});
 var createError = require('http-errors');
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -17,6 +18,7 @@ var gatewayRouter = require('./routes/Gateway');
 var coreBankingRouter = require('./routes/CoreBanking');
 
 var app = express();
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 var hostname = process.env['BASE_URL'];
 // swagger definition
 var swaggerDefinition = {
@@ -63,12 +65,10 @@ app.use('/authenticate', authenticatorRouter);
 app.use('/api', apiRouter);
 app.use('/gateway', gatewayRouter);
 app.use('/corebanking', coreBankingRouter);
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development

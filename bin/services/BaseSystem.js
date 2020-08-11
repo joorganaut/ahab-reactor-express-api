@@ -43,5 +43,10 @@ class BaseSystem extends BaseProcessor{
         let objs = await this.T.GetAllByNoPaging(model, params);
         return objs;
     }
+    async RetrieveManyWithPaging(model, params){
+        let count = 0;
+        let objs = await this.T.GetAllBy(model, params, count);
+        return objs;
+    }
 }
 module.exports = BaseSystem;
