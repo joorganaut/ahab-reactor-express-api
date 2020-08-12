@@ -6,10 +6,6 @@
     "start": "node ./bin/www",
     "build": "node"
   },
-  "engines": {
-    "node": ">=10.0.0",
-    "npm": "6.4.1"
-  },
   "dependencies": {
     "axios": "^0.19.2",
     "clean-css": "^4.2.3",
