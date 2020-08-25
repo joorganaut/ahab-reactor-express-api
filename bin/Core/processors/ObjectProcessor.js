@@ -1,8 +1,8 @@
 class ObjectProcessor {
-    MapModelFromObject(model, obj) {
+    static MapModelFromObject(model, obj) {
         for (var prop in obj) {
             if (prop in model) {
-                if (model[prop] !== obj[prop] && obj[prop] !== null) {
+                if (model[prop] !== obj[prop] && obj[prop] !== null && obj[prop] !== undefined) {
                     model[prop] = obj[prop];
                 }
             }

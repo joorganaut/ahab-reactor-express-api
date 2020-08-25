@@ -1,10 +1,12 @@
 class BaseModel{
     constructor(props){
+        this.ID = props === undefined ? 0 : props.ID;
         this.Error = props === undefined ? '' : props.Error;
         this.InstitutionID = props === undefined ? 0 : props.InstitutionID;
-        this.IsEnabled = props === undefined ? 0 : props.IsEnabled;
-        this.DateCreated = props === undefined ? 0 : props.DateCreated;
-        this.DateLastModified = props === undefined ? 0 : props.DateLastModified;
+        this.InstitutionCode = props === undefined ? '' : props.InstitutionCode;
+        this.IsEnabled = props === undefined ? false : props.IsEnabled;
+        this.DateCreated = props === undefined ? new Date() : props.DateCreated;
+        this.DateLastModified = props === undefined ? new Date() : props.DateLastModified;
         this.CreatedBy = props === undefined ? 0 : props.CreatedBy;
         this.LastModifiedBy = props === undefined ? 0 : props.LastModifiedBy;
         this.Name = props === undefined ? 0 : props.Name;

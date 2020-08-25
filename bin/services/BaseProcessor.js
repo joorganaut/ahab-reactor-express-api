@@ -1,7 +1,8 @@
 const HTTPEngine = require('./common/HTTPEngine');
+const ObjectProcessor = require('../Core/processors/ObjectProcessor');
 class BaseProcessor {
     constructor() {
-
+        this.ObjectProcessor = ObjectProcessor;
     }
     static Empty(){return '';}
     static ToCharArray(word){

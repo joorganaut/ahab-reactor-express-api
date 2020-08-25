@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-require('dotenv').config({path: __dirname + '/.env'})
+require('dotenv').config({path: __dirname + '/.env'});
 /**
  * Module dependencies.
  */
@@ -13,7 +13,7 @@ var http = require('http');
 const SchemaUpdate = require('./services/common/SchemaUpdate');
 SchemaUpdate.SchemaUpdate();
 SchemaUpdate.PopulateRoles().then(()=>{});
-SchemaUpdate.PopulateUserFunctions().then(()=>{})
+SchemaUpdate.PopulateUserFunctions().then(()=>{});
 /**
  * Get port from environment and store in Express.
  */

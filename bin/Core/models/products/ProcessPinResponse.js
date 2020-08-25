@@ -1,5 +1,5 @@
-const BaseRequest = require('../../contracts/BaseRequest');
-class ProcessPinResponse extends BaseRequest{
+const BaseResponse = require('../../contracts/BaseResponse');
+class ProcessPinResponse extends BaseResponse{
     constructor(props){
         super(props);
      }

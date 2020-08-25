@@ -65,7 +65,7 @@ class UserSystem extends BaseSystem{
     async Login(request, response){
         try{
             let institution = await this.RetrieveByParameter(Institution, {Code: request.InstitutionCode});
-            if (institution == null)
+            if (institution === null)
             {
                 response.Code = this.Responses.MessageResponse_GENERAL_ERROR.Code;
                 response.Message = `${this.Responses.MessageResponse_GENERAL_ERROR.Message}: Unable to retrieve Institution with Code: ${request.InstitutionCode}`;
@@ -79,10 +79,11 @@ class UserSystem extends BaseSystem{
                 return response;
             }
             let md5Password = saltedMd5(request.Password);
+            console.log('::password '+usr.Password);
             if (usr.Password != md5Password)
             {
                 response.Code = this.Responses.MessageResponse_AUTHENTICATION_ERROR.Code;
-                response.ResponseMessage = `${this.Responses.MessageResponse_AUTHENTICATION_ERROR.Message}`;
+                response.Message = `${this.Responses.MessageResponse_AUTHENTICATION_ERROR.Message}`;
                 return response;
             }
             
@@ -131,7 +132,9 @@ class UserSystem extends BaseSystem{
         let request = new LoginRequest(this.response.req.body);
         let response = new LoginResponse(this.response.Response);
         if(this.response.Response.Code === '00'){
+            console.log('::before '+JSON.stringify(response));
             response = await this.Login(request, response);
+            console.log('::after '+JSON.stringify(response));
         }
         this.response.res.send(response.ToString());
     }
