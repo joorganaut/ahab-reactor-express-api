@@ -1,11 +1,11 @@
-const BaseRequest = require("../../../contracts/BaseRequest");
+const BaseResponse = require("../../../contracts/BaseResponse");
 
 
-class SearchResult extends BaseRequest{
+class SearchResult extends BaseResponse{
     constructor(props){
         super(props);
         this.Model = props === undefined ? [] : props.Records;
-        this.TotalItemsCount = props === undefined ? 0 : props.TotalItemsCount;
+        this.count = props === undefined ? 0 : props.count;
     }
 }
 module.exports = {SearchResult};

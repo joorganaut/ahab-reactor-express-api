@@ -23,6 +23,10 @@ const {
 const {
     XchangeModel
 } = require('../Core/models/data/XchangeModel');
+const {
+    Op, 
+    Sequelize
+} = require('sequelize');
 const moment = require('moment');
 class XchangeSystem extends BaseSystem {
     constructor(response, props) {
@@ -32,7 +36,7 @@ class XchangeSystem extends BaseSystem {
     }
     async ViewAllXchangesAsync() {
         let response = new ViewAllXchangeResponse(this.response.Response);
-        let request = new ViewAllXchangeRequest(this.response.req.body);
+        let request = new ViewAllXchangeRequest(this.response.req.query);
         if (this.response.Response.Code === '00') {
             response = await this.ViewAllXchanges(request, response);
         }
@@ -40,17 +44,29 @@ class XchangeSystem extends BaseSystem {
     }
     async ViewXchangeAsync() {
         let response = new ViewAllXchangeResponse(this.response.Response);
-        let request = new ViewAllXchangeRequest(this.response.req.body);
+        let request = new ViewAllXchangeRequest(this.response.req.query);
         if (this.response.Response.Code === '00') {
-            response = await this.ViewAllXchanges(request, response);
+            response = await this.Get(request, response);
         }
         this.response.res.send(response.ToString());
     }
     async ViewAllXchanges(request, response) {
-        let res = await this.RetrieveMany(Exchange, {});
-        response.Model = res;
-        response.Code = this.Responses.MessageResponse_SUCCESS.Code;
-        response.Message = this.Responses.MessageResponse_SUCCESS.Message;
+        try {
+            if (request.Amount) {
+                request.query = {
+                    Amount: {[Op.lte] : request.Amount}
+                };
+            }
+            let res = await this.RetrieveManyWithPaging(Exchange, request);
+            response.Model = res.result;
+            response.count = res.count;
+            response.Code = this.Responses.MessageResponse_SUCCESS.Code;
+            response.Message = this.Responses.MessageResponse_SUCCESS.Message;
+        } catch (e) {
+            console.log('Exception:::: ' + e);
+            response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+            response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e}`;
+        }
         return response;
     }
     async AddXchangeAsync() {
@@ -79,21 +95,21 @@ class XchangeSystem extends BaseSystem {
     async UpdateXchange(request, response) {
         try {
             let model = new XchangeModel(request.Model);
-            console.log('Request Model:::: '+JSON.stringify(model));
+            console.log('Request Model:::: ' + JSON.stringify(model));
             const id = parseInt(model.ID);
             let dbModel = {};
-            await this.Get(Exchange, id).then(res=>{
+            await this.Get(Exchange, id).then(res => {
                 dbModel = res;
             });
-            if(BaseSystem.IsNullOrUndefined(dbModel)){
+            if (BaseSystem.IsNullOrUndefined(dbModel)) {
                 response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
                 response.Message = `Unable to retrieve Xchange `;
                 return response;
             }
             dbModel = this.ObjectProcessor.MapModelFromObject(dbModel, model);
-            console.log('DB Model:::: '+JSON.stringify(dbModel));
+            console.log('DB Model:::: ' + JSON.stringify(dbModel));
             let result = await this.Update(dbModel);
-            console.log('Update result:::: '+JSON.stringify(dbModel));
+            console.log('Update result:::: ' + JSON.stringify(dbModel));
             if (BaseSystem.IsNullOrUndefined(result)) {
                 response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
                 response.Message = `Unable to update Xchange details`;
@@ -157,6 +173,36 @@ class XchangeSystem extends BaseSystem {
                 return response;
             }
             response.TransactionRef = result.TransactionRef;
+        } catch (e) {
+            console.log('Exception:::: ' + e);
+            response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+            response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e}`;
+        }
+        return response;
+    }
+    async GetXchange(request, response) {
+        try {
+            let model = new XchangeModel(request.Model);
+            console.log('Request Model:::: ' + JSON.stringify(model));
+            const id = parseInt(model.ID);
+            let dbModel = {};
+            await this.Get(Exchange, id).then(res => {
+                dbModel = res;
+            });
+            if (BaseSystem.IsNullOrUndefined(dbModel)) {
+                response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+                response.Message = `Unable to retrieve Xchange `;
+                return response;
+            }
+            dbModel = this.ObjectProcessor.MapModelFromObject(dbModel, model);
+            console.log('DB Model:::: ' + JSON.stringify(dbModel));
+            let result = await this.Update(dbModel);
+            console.log('Update result:::: ' + JSON.stringify(dbModel));
+            if (BaseSystem.IsNullOrUndefined(result)) {
+                response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+                response.Message = `Unable to update Xchange details`;
+                return response;
+            }
         } catch (e) {
             console.log('Exception:::: ' + e);
             response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;

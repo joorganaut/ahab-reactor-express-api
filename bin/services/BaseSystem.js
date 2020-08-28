@@ -45,6 +45,13 @@ class BaseSystem extends BaseProcessor{
     }
     async RetrieveManyWithPaging(model, params){
         let count = 0;
+        let pagingParams = {
+            page : params.Page,
+            pageSize: params.PageSize,
+            sort: params.Sort,
+            dir: params.Direction
+        };
+        params.pagingParams = pagingParams;
         let objs = await this.T.GetAllBy(model, params, count);
         return objs;
     }
