@@ -11,7 +11,6 @@ const {BaseModel} = require('../../contracts/BaseModel');
 class XchangeModel extends BaseModel{
     constructor(props){
         super(props);
-        console.log(JSON.stringify(props));
         this.RequesterUserID = props === undefined ? 0 :  props.RequesterUserID;
         this.Amount = props === undefined ? 0 :  props.Amount;
         this.Rate = props === undefined ? 0 : props.Rate;

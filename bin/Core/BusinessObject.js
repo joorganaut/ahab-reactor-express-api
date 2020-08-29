@@ -40,7 +40,7 @@ let sequelize = new Sequelize({
         idle: 300000,
         acquire: 300000
     },
-    logging: null//log => console.log('logging:', log)
+    logging: log => console.log('logging:', log)
 });
 module.exports = {
     BusinessObject,

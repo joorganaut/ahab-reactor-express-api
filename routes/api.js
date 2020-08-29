@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var {AuthenticationSystem} = require('../bin/services/AuthenticationSystem');
-var {InstitutionSystem} = require('../bin/services/InstitutionSystem');
-var {UserSystem} = require('../bin/services/UserSystem');
-var {VTUSystem} = require('../bin/services/VTUSystem');
+const {AuthenticationSystem} = require('../bin/services/AuthenticationSystem');
+const {InstitutionSystem} = require('../bin/services/InstitutionSystem');
+const {UserSystem} = require('../bin/services/UserSystem');
+const {VTUSystem} = require('../bin/services/VTUSystem');
+const {NotificationSystem} = require('../bin/services/NotificationSystem')
 
 /**
  * @swagger
@@ -779,6 +780,28 @@ router.post('/MobileMiddleware/VTUService/ValidateTransactionPin', async functio
 router.post('/MobileMiddleware/VTUWalletFunding/FundVTUWallet', async function(req, res, next){
     new AuthenticationSystem(req, res, next, ["admin", "posting", "system"], async (response)=>{
         await new VTUSystem(response).FundVTUWalletAsync();
+    });
+});
+
+router.post('/notification', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["user"], async (response)=>{
+        await new NotificationSystem(response).AddNotificationAsync();
+    });
+});
+router.put('/notification', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["user"], async (response)=>{
+        await new NotificationSystem(response).UpdateNotificationAsync();
+    });
+});
+
+router.get('/notification', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["user"], async (response)=>{
+        await new NotificationSystem(response).ViewAllNotificationsAsync();
+    });
+});
+router.get('/notification/:id', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
+        await new NotificationSystem(response).ViewNotificationAsync();
     });
 });
 module.exports = router;

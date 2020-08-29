@@ -66,7 +66,7 @@ router.get('/xchange', async function(req, res, next) {
 });
 router.get('/xchange/:id', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
-        await new XchangeSystem(response).ViewAllXchangesAsync();
+        await new XchangeSystem(response).ViewXchangeAsync();
     });
 });
 module.exports = router;
