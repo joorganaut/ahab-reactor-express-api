@@ -1,25 +1,25 @@
 const BaseSystem = require('./BaseSystem');
 const {
     Notification
-} = require('../Core/data/Notification');
+} = require('../Core/data/notification');
 const {
     AddNotificationRequest
 } = require('../Core/models/notification/AddNotificationRequest');
 const {
     AddNotificationResponse
-} = require('../Core/models/Notification/AddNotificationResponse');
+} = require('../Core/models/notification/AddNotificationResponse');
 const {
     UpdateNotificationRequest
-} = require('../Core/models/Notification/UpdateNotificationRequest');
+} = require('../Core/models/notification/UpdateNotificationRequest');
 const {
     UpdateNotificationResponse
-} = require('../Core/models/Notification/UpdateNotificationResponse');
+} = require('../Core/models/notification/UpdateNotificationResponse');
 const {
     ViewAllNotificationRequest
-} = require('../Core/models/Notification/ViewAllNotificationRequest');
+} = require('../Core/models/notification/ViewAllNotificationRequest');
 const {
     ViewAllNotificationResponse
-} = require('../Core/models/Notification/ViewAllNotificationResponse');
+} = require('../Core/models/notification/ViewAllNotificationResponse');
 const {
     NotificationModel
 } = require('../Core/models/data/NotificationModel');
