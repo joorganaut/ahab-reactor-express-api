@@ -1,7 +1,7 @@
 const BaseSystem = require('./BaseSystem');
 const {
     Notification
-} = require('../Core/data/notification');
+} = require('../Core/data/Notification');
 const {
     AddNotificationRequest
 } = require('../Core/models/notification/AddNotificationRequest');
