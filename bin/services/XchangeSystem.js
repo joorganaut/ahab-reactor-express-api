@@ -89,7 +89,7 @@ class XchangeSystem extends BaseSystem {
     }
     async GenerateRef(model) {
         let dateString = BaseSystem.GetDateAndTime();
-        const tRef = `${model.FromCurrency}-${model.ToCurrency}-${model.UserID}-${dateString}`;
+        const tRef = `${model.FromCurrency}-${model.ToCurrency}-${model.RequesterUserID}-${dateString}`;
         return tRef;
     }
     async UpdateXchange(request, response) {
@@ -136,7 +136,6 @@ class XchangeSystem extends BaseSystem {
                 response.Message = `Please provide a "Rate" greater than 0 `;
                 return response;
             }
-
             let momentDate = moment(model.ExpiryDate).toDate();
 
             console.log(momentDate.toDateString() + ' - second date' + new Date().toDateString());

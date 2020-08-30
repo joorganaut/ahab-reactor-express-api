@@ -12,7 +12,7 @@ const DISABLE_SEQUELIZE_DEFAULTS = {
 const sequelize  = BusinessObject.sequelize;
 const Exchange = sequelize.define('Exchanges', {
     ID: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
-    UserID: { type:  DataTypes.BIGINT},
+    RequesterUserID: { type:  DataTypes.BIGINT},
     Amount: { type:  DataTypes.DECIMAL},
     Rate: { type:  DataTypes.DECIMAL},
     FromCurrency: { type:  DataTypes.STRING},

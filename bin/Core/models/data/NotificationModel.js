@@ -12,6 +12,8 @@ class NotificationModel extends BaseModel{
         this.Sender = props === undefined ? 0 :  props.Sender;
         this.Body = props === undefined ? '' : props.Body;
         this.Status = props === undefined ? '' :  props.Status;
+        this.Recipient = props === undefined ? '' : props.Recipient;
+        this.Template = props === undefined ? null :  props.Template;
     }
 } 
 module.exports = {NotificationModel};

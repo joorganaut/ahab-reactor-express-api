@@ -52,11 +52,11 @@ class NotificationSystem extends BaseSystem {
     }
     async ViewAllNotifications(request, response) {
         try {
-            if (request.Amount) {
-                request.query = {
-                    Amount: {[Op.lte] : request.Amount}
-                };
-            }
+            // if (request.Amount) {
+            //     request.query = {
+            //         Amount: {[Op.lte] : request.Amount}
+            //     };
+            // }
             let res = await this.RetrieveManyWithPaging(Notification, request);
             response.Model = res.result;
             response.count = res.count;
@@ -127,7 +127,6 @@ class NotificationSystem extends BaseSystem {
                 response.Message = `Unable to create institution details`;
                 return response;
             }
-            response.TransactionRef = result.TransactionRef;
         } catch (e) {
             console.log('Exception:::: ' + e);
             response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
