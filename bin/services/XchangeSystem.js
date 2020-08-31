@@ -52,10 +52,14 @@ class XchangeSystem extends BaseSystem {
     }
     async ViewAllXchanges(request, response) {
         try {
+            request.query = {};
             if (request.Amount) {
                 request.query = {
                     Amount: {[Op.lte] : request.Amount}
                 };
+            }
+            if(request.RequesterID){
+                request.query.RequesterUserID =  parseInt(request.RequesterID);
             }
             let res = await this.RetrieveManyWithPaging(Exchange, request);
             response.Model = res.result;
