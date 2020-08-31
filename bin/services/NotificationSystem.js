@@ -52,11 +52,11 @@ class NotificationSystem extends BaseSystem {
     }
     async ViewAllNotifications(request, response) {
         try {
-            // if (request.Amount) {
-            //     request.query = {
-            //         Amount: {[Op.lte] : request.Amount}
-            //     };
-            // }
+            if (request.Status) {
+                request.query = {
+                    Status: 'unread'
+                };
+            }
             let res = await this.RetrieveManyWithPaging(Notification, request);
             response.Model = res.result;
             response.count = res.count;
