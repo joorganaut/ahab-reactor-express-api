@@ -150,7 +150,17 @@ class UserSystem extends BaseSystem{
                     IsAuthenticated: true,
                     LastLoginDate: new Date(),
                 });
-                const registerResponse = await this.RegisterIndividualWithGoogle(request, response, true);
+                const customerModel = new CustomerModel({
+                    FirstName: request.FirstName,
+                    LastName: request.LastName,
+                    OtherName: request.FirstName,
+                    PhoneNumber: request.PhoneNumber,
+                    Email: request.LoginUsername,
+                    Address: new AddressModel()
+                });
+                request.UserModel = userModel;
+                request.CustomerModel = customerModel;
+                const registerResponse = await this.RegisterIndividualWithGoogle(request, response, institution);
                 usr = registerResponse.user;
                 response = registerResponse.response;
             }
@@ -510,10 +520,11 @@ class UserSystem extends BaseSystem{
         return response;
     }
 
-    async RegisterIndividualWithGoogle(request, response, skipInstitutionValidation){
+    async RegisterIndividualWithGoogle(request, response, institution){
+        let user = null;
         try
             {
-                let user = await this.CreateIndividualDetails(request, institution);
+                user = await this.CreateIndividualDetails(request, institution);
                 if (user !== null)
                 {
                     //await SendWelcomeMail(institution, user);
