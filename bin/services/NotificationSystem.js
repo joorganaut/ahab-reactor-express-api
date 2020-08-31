@@ -54,7 +54,8 @@ class NotificationSystem extends BaseSystem {
         try {
             if (request.Status) {
                 request.query = {
-                    Status: 'unread'
+                    Status: 'unread',
+                    Recipient: request.Recipient
                 };
             }
             let res = await this.RetrieveManyWithPaging(Notification, request);

@@ -105,6 +105,8 @@ class UserSystem extends BaseSystem{
                 response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: Unable to retrieve Customer`;
                 return response;
             }
+            usr.Password = null;
+            usr.TransactionPin = null;
             response.UserServiceModel = new UserModel(usr);
             usr.LastLoginDate = BaseSystem.GetDate(true);
             response.IsAuthenticated = true;
@@ -183,6 +185,8 @@ class UserSystem extends BaseSystem{
                 response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: Unable to retrieve Customer`;
                 return response;
             }
+            usr.Password = null;
+            usr.TransactionPin = null;
             response.UserServiceModel = new UserModel(usr);
             usr.LastLoginDate = BaseSystem.GetDate(true);
             response.IsAuthenticated = true;
