@@ -52,10 +52,13 @@ class NotificationSystem extends BaseSystem {
     }
     async ViewAllNotifications(request, response) {
         try {
-            if (request.Status) {
+            request.query = {
+                Recipient: parseInt(request.Recipient)
+            };
+            if(!BaseSystem.IsNullOrUndefined(request.Status)){
                 request.query = {
-                    Status: 'unread',
-                    Recipient: request.Recipient
+                    Recipient: parseInt(request.Recipient),
+                    Status: request.Status
                 };
             }
             let res = await this.RetrieveManyWithPaging(Notification, request);
