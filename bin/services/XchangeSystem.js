@@ -59,7 +59,7 @@ class XchangeSystem extends BaseSystem {
                 };
             }
             if(request.RequesterID){
-                request.query.RequesterUserID =  parseInt(request.RequesterID);
+                request.query.RequesterUserID = {[Op.ne] : parseInt(request.RequesterID)};
             }
             let res = await this.RetrieveManyWithPaging(Exchange, request);
             response.Model = res.result;
