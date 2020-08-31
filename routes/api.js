@@ -431,6 +431,36 @@ router.post('/MobileMiddleware/Authentication/ValidateInstitution', async functi
     });
 });
 
+/**
+ * @swagger
+ * /api/MobileMiddleware/Authentication/GoogleLogin:
+ *   post:
+ *     tags:
+ *       - Authenticate, User
+ *     description: Authenticates a User
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: LoginRequest
+ *         description: Validate User Request Object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/LoginRequest'
+ *     responses:
+ *       200:
+ *         name: LoginResponse
+ *         description: returns a response object signifying success or failure with reason
+ *         schema: 
+ *           $ref: '#/definitions/LoginResponse'
+ */
+/* POST retrieve all institution. */
+router.post('/MobileMiddleware/Authentication/GoogleLogin', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
+        await new UserSystem(response).GoogleLoginAsync();
+    });
+});
+
 
 /**
  * @swagger

@@ -128,12 +128,91 @@ class UserSystem extends BaseSystem{
         }
         return response;
     }
+    async GoogleLogin(request, response){
+        try{
+            let institution = await this.RetrieveByParameter(Institution, {Code: request.InstitutionCode});
+            if (institution === null)
+            {
+                response.Code = this.Responses.MessageResponse_GENERAL_ERROR.Code;
+                response.Message = `${this.Responses.MessageResponse_GENERAL_ERROR.Message}: Unable to retrieve Institution with Code: ${request.InstitutionCode}`;
+                return response;
+            }
+            let usr = await this.RetrieveByParameter(User, {Username : request.LoginUsername});
+            if (usr === null)
+            {
+                //TODO: create new user using register user
+                const userModel = new UserModel({
+                    Username: request.LoginUsername,
+                    FirstName: request.FirstName,
+                    LastName: request.LastName,
+                    Password: request.Password,
+                    Email: request.LoginUsername,
+                    IsAuthenticated: true,
+                    LastLoginDate: new Date(),
+                });
+                const registerResponse = await this.RegisterIndividualWithGoogle(request, response, true);
+                usr = registerResponse.user;
+                response = registerResponse.response;
+            }
+            
+            response.InstitutionModel = new InstitutionModel(institution);
+            let customer = await this.RetrieveByParameter(Customer, {UserID : usr.ID});
+            if (customer !== null)
+            {
+                let customerAccounts = await this.RetrieveMany(Account, {CustomerID : customer.ID});
+                response.AccountModels = [];
+                response.AccountModels.push(customerAccounts.filter(x =>
+                {
+                    return new AccountModel(x);
+                }));
+                response.CustomerModel = new CustomerModel(customer);
+            }
+            else
+            {
+                response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+                response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: Unable to retrieve Customer`;
+                return response;
+            }
+            response.UserServiceModel = new UserModel(usr);
+            usr.LastLoginDate = BaseSystem.GetDate(true);
+            response.IsAuthenticated = true;
+            if (!BaseSystem.IsNullOrUndefined(await this.Update(usr)))
+            {
+                //TODO: add validation and send email
+                response.Code = this.Responses.MessageResponse_SUCCESS.Code;
+                response.Message = `${this.Responses.MessageResponse_SUCCESS.Message}`;
+            }
+            else
+            {
+                response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+                response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${this.Error}`;
+            }
+        }catch(e){
+            response.InstitutionModel = null;
+            response.UserModel = null;
+            response.CustomerModel = null;
+            response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+            response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e.message}`;
+        }
+        return response;
+    }
     async LoginAsync(){
         let request = new LoginRequest(this.response.req.body);
         let response = new LoginResponse(this.response.Response);
         if(this.response.Response.Code === '00'){
             console.log('::before '+JSON.stringify(response));
             response = await this.Login(request, response);
+            console.log('::after '+JSON.stringify(response));
+        }
+        this.response.res.send(response.ToString());
+    }
+
+    async GoogleLoginAsync(){
+        let request = new LoginRequest(this.response.req.body);
+        let response = new LoginResponse(this.response.Response);
+        if(this.response.Response.Code === '00'){
+            console.log('::before '+JSON.stringify(response));
+            response = await this.GoogleLogin(request, response);
             console.log('::after '+JSON.stringify(response));
         }
         this.response.res.send(response.ToString());
@@ -401,7 +480,7 @@ class UserSystem extends BaseSystem{
                 let password = request.InstitutionPassword;
                 let institution = await this.ValidateInstitution(code, password);
                 //institution = {ID : 1, Code : '1223334444', Name : 'Test Institution', ShortName : 'TI'};
-                if (institution !== null)
+                if (institution !== null || skipInstitutionValidation)
                 {
                     //Create Institution details
                     let user = await this.CreateIndividualDetails(request, institution);
@@ -429,6 +508,30 @@ class UserSystem extends BaseSystem{
                 response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e.message}`;
             }
         return response;
+    }
+
+    async RegisterIndividualWithGoogle(request, response, skipInstitutionValidation){
+        try
+            {
+                let user = await this.CreateIndividualDetails(request, institution);
+                if (user !== null)
+                {
+                    //await SendWelcomeMail(institution, user);
+                    response.Code = this.Responses.MessageResponse_SUCCESS.Code;
+                    response.Message = `${this.Responses.MessageResponse_SUCCESS.Message}`;
+                }
+                else
+                {
+                    response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+                    response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${this.Error}`;
+                }
+            }
+            catch (e)
+            {
+                response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+                response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e.message}`;
+            }
+        return {response, user};
     }
     async RegisterIndividualAsync(){
         let request = new IndividualRegisterRequest(this.response.req.body);
