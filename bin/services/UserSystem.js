@@ -105,8 +105,7 @@ class UserSystem extends BaseSystem{
                 response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: Unable to retrieve Customer`;
                 return response;
             }
-            usr.Password = null;
-            usr.TransactionPin = null;
+            
             response.UserServiceModel = new UserModel(usr);
             usr.LastLoginDate = BaseSystem.GetDate(true);
             response.IsAuthenticated = true;
@@ -118,6 +117,8 @@ class UserSystem extends BaseSystem{
             }
             else
             {
+                usr.Password = null;
+                usr.TransactionPin = null;
                 response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
                 response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${this.Error}`;
             }
@@ -185,14 +186,14 @@ class UserSystem extends BaseSystem{
                 response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: Unable to retrieve Customer`;
                 return response;
             }
-            usr.Password = null;
-            usr.TransactionPin = null;
             response.UserServiceModel = new UserModel(usr);
             usr.LastLoginDate = BaseSystem.GetDate(true);
             response.IsAuthenticated = true;
             if (!BaseSystem.IsNullOrUndefined(await this.Update(usr)))
             {
                 //TODO: add validation and send email
+                usr.Password = null;
+                usr.TransactionPin = null;
                 response.Code = this.Responses.MessageResponse_SUCCESS.Code;
                 response.Message = `${this.Responses.MessageResponse_SUCCESS.Message}`;
             }
