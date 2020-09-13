@@ -150,6 +150,7 @@ class UserSystem extends BaseSystem{
                     LastName: request.LastName,
                     Password: request.Password,
                     Email: request.LoginUsername,
+                    PhoneNumber: request.Mobile,
                     IsAuthenticated: true,
                     LastLoginDate: new Date(),
                 });
@@ -157,7 +158,7 @@ class UserSystem extends BaseSystem{
                     FirstName: request.FirstName,
                     LastName: request.LastName,
                     OtherName: request.FirstName,
-                    PhoneNumber: request.PhoneNumber,
+                    PhoneNumber: request.Mobile,
                     Email: request.LoginUsername,
                     Address: new AddressModel()
                 });

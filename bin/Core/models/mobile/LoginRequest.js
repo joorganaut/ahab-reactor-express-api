@@ -6,6 +6,7 @@ class LoginRequest extends BaseRequest{
         this.Password =  props === undefined ? '' : props.Password;
         this.FirstName = props === undefined ? '' : props.FirstName;
         this.LastName = props === undefined ? '' : props.LastName;
+        this.Mobile = props === undefined ? '' : props.Mobile;
     }
 }
 module.exports = {LoginRequest};

@@ -4,7 +4,7 @@ const {AuthenticationSystem} = require('../bin/services/AuthenticationSystem');
 const {InstitutionSystem} = require('../bin/services/InstitutionSystem');
 const {UserSystem} = require('../bin/services/UserSystem');
 const {VTUSystem} = require('../bin/services/VTUSystem');
-const {NotificationSystem} = require('../bin/services/NotificationSystem')
+const {NotificationSystem} = require('../bin/services/NotificationSystem');
 
 /**
  * @swagger
