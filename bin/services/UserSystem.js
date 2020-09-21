@@ -28,6 +28,9 @@ const ResetPinRequest = require('../Core/models/mobile/ResetPinRequest').ResetPi
 const ResetPinResponse = require('../Core/models/mobile/ResetPinResponse').ResetPinResponse;
 const IndividualRegisterRequest = require('../Core/models/mobile/IndividualRegisterRequest').IndividualRegisterRequest;
 const IndividualRegisterResponse = require('../Core/models/mobile/IndividualRegisterResponse').IndividualRegisterResponse;
+const GetUserRequest = require('../Core/models/user/GetUserRequest').GetUserRequest;
+const GetUserResponse = require('../Core/models/user/GetUserResponse').GetUserResponse;
+
 
 class UserSystem extends BaseSystem{
     constructor(response, props){
@@ -578,6 +581,26 @@ class UserSystem extends BaseSystem{
             this.response.res.render('ActivationError', {Error : 'Unable to determine your institution'});
         }
     }
-    
+    async GetUserAsync(){
+        let request = new GetUserRequest(this.response.req.params);
+        let response = new GetUserResponse(this.response.Response);
+        if(this.response.Response.Code === '00'){
+            response = await this.GetUser(request, response);
+        }
+        this.response.res.send(response.ToString());
+    }
+    async GetUser(request, response){
+        try {
+            let res = await this.Get(User, request.ID);
+            response.Model = new UserModel(res);
+            response.Code = this.Responses.MessageResponse_SUCCESS.Code;
+            response.Message = this.Responses.MessageResponse_SUCCESS.Message;
+        } catch (e) {
+            console.log('Exception:::: ' + e);
+            response.Code = this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Code;
+            response.Message = `${this.Responses.MessageResponse_SYSTEM_MALFUNCTION.Message}: ${e}`;
+        }
+        return response;
+    }
 }
 module.exports = {UserSystem};

@@ -17,6 +17,8 @@ const Notification = sequelize.define('Notifications', {
     Title: { type:  DataTypes.STRING},
     Status: { type:  DataTypes.STRING},
     Template: { type:  DataTypes.STRING},
+    TransactionType: {type: DataTypes.STRING},
+    TransactionID: {type: DataTypes.BIGINT},
     //Parent properties
     InstitutionID: {type: DataTypes.BIGINT},
     InstitutionCode: {type: DataTypes.STRING},

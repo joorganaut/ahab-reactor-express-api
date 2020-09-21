@@ -13,6 +13,7 @@ const sequelize  = BusinessObject.sequelize;
 const Exchange = sequelize.define('Exchanges', {
     ID: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
     RequesterUserID: { type:  DataTypes.BIGINT},
+    AccepterUserID: { type:  DataTypes.BIGINT},
     Amount: { type:  DataTypes.DECIMAL},
     Rate: { type:  DataTypes.DECIMAL},
     FromCurrency: { type:  DataTypes.STRING},
@@ -23,6 +24,8 @@ const Exchange = sequelize.define('Exchanges', {
     Response: { type:  DataTypes.STRING},
     ExpiryDate: {type: DataTypes.DATE},
     TransactionRef: {type: DataTypes.STRING},
+    TransactionType: {type: DataTypes.STRING},
+    TransactionID: {type: DataTypes.BIGINT},
     //Parent properties
     InstitutionID: {type: DataTypes.BIGINT},
     InstitutionCode: {type: DataTypes.STRING},

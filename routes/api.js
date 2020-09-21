@@ -829,9 +829,14 @@ router.get('/notification', async function(req, res, next) {
         await new NotificationSystem(response).ViewAllNotificationsAsync();
     });
 });
-router.get('/notification/:id', async function(req, res, next) {
+router.get('/notification/:ID', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
         await new NotificationSystem(response).ViewNotificationAsync();
+    });
+});
+router.get('/user/:ID', async function(req, res, next) {
+    new AuthenticationSystem(req, res, next, ["user"], async (response)=>{
+        await new UserSystem(response).GetUserAsync();
     });
 });
 module.exports = router;

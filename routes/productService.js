@@ -64,7 +64,7 @@ router.get('/xchange', async function(req, res, next) {
         await new XchangeSystem(response).ViewAllXchangesAsync();
     });
 });
-router.get('/xchange/:id', async function(req, res, next) {
+router.get('/xchange/:ID', async function(req, res, next) {
     new AuthenticationSystem(req, res, next, ["*"], async (response)=>{
         await new XchangeSystem(response).ViewXchangeAsync();
     });
